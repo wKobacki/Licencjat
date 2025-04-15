@@ -68,3 +68,106 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+data base to this project:
+
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role ENUM('user', 'admin') NOT NULL,
+    name VARCHAR(255),
+    surname VARCHAR(255),
+    branch VARCHAR(255),
+    isVerified TINYINT DEFAULT 0,
+    isBlocked TINYINT DEFAULT 0
+);
+
+CREATE TABLE verification_codes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) NOT NULL,
+    code VARCHAR(255) NOT NULL,
+    expiresAt DATETIME NOT NULL,
+    FOREIGN KEY (email) REFERENCES users(email) ON DELETE CASCADE
+);
+
+CREATE TABLE problems (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255),
+    department VARCHAR(255),
+    description TEXT,
+    solution TEXT,
+    images TEXT,
+    branch VARCHAR(255),
+    author_email VARCHAR(255),
+    isPublished TINYINT DEFAULT 0,
+    status ENUM('open', 'in_progress', 'closed') DEFAULT 'open',
+    votes INT DEFAULT 0,
+    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    archived TINYINT DEFAULT 0,
+    FOREIGN KEY (author_email) REFERENCES users(email) ON DELETE SET NULL
+);
+
+CREATE TABLE ideas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255),
+    description TEXT,
+    branch VARCHAR(255),
+    author_email VARCHAR(255),
+    status ENUM('new', 'approved', 'rejected') DEFAULT 'new',
+    votes INT DEFAULT 0,
+    department VARCHAR(255),
+    solution TEXT,
+    images TEXT,
+    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    isPublished TINYINT DEFAULT 0,
+    archived TINYINT DEFAULT 0,
+    FOREIGN KEY (author_email) REFERENCES users(email) ON DELETE SET NULL
+);
+
+CREATE TABLE comments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    item_id INT NOT NULL,
+    item_type ENUM('idea', 'problem') NOT NULL,
+    parent_id INT,
+    author_email VARCHAR(255),
+    content TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (author_email) REFERENCES users(email) ON DELETE SET NULL,
+    FOREIGN KEY (parent_id) REFERENCES comments(id) ON DELETE CASCADE
+);
+
+CREATE TABLE comment_likes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    comment_id INT NOT NULL,
+    user_email VARCHAR(255),
+    FOREIGN KEY (comment_id) REFERENCES comments(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_email) REFERENCES users(email) ON DELETE CASCADE
+);
+
+CREATE TABLE user_votes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_email VARCHAR(255),
+    item_id INT,
+    item_type ENUM('idea', 'problem') NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_email) REFERENCES users(email) ON DELETE CASCADE
+);
+
+CREATE TABLE votes_ideas (
+    user_email VARCHAR(255),
+    idea_id INT,
+    PRIMARY KEY (user_email, idea_id),
+    FOREIGN KEY (user_email) REFERENCES users(email) ON DELETE CASCADE,
+    FOREIGN KEY (idea_id) REFERENCES ideas(id) ON DELETE CASCADE
+);
+
+CREATE TABLE votes_problems (
+    user_email VARCHAR(255),
+    problem_id INT,
+    PRIMARY KEY (user_email, problem_id),
+    FOREIGN KEY (user_email) REFERENCES users(email) ON DELETE CASCADE,
+    FOREIGN KEY (problem_id) REFERENCES problems(id) ON DELETE CASCADE
+);

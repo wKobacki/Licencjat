@@ -1,0 +1,107 @@
+.container {
+    padding: 24px;
+    background-color: #f5f6f8;
+}
+
+h3 {
+    margin-top: 0;
+}
+
+.addButton {
+    background-color: #007acc;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.addButton:hover {
+    background-color: #005b9a;
+}
+
+.problemList {
+    display: grid;
+    gap: 24px;
+}
+
+.problemCard {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+.statusTag {
+    font-weight: bold;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    display: inline-block;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.status-in_progress {
+    background-color: #007acc;
+}
+
+.status-in_voting {
+    background-color: #f39c12;
+}
+
+.status-completed {
+    background-color: #2ecc71;
+}
+
+.status-rejected {
+    background-color: #e74c3c;
+}
+
+.imageGallery {
+    margin: 10px 0;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.thumbnail {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.voteButtonContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+}
+
+.voteButton {
+    background-color: #007acc;
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.voteButton:hover {
+    background-color: #005b9a;
+}
+
+.voteButton.voted {
+    background-color: #1a4e77;
+}
+
+.voteCount {
+    font-weight: bold;
+    font-size: 0.95em;
+}

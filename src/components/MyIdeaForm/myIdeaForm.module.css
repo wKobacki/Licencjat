@@ -1,0 +1,75 @@
+.formSection {
+    margin: 20px auto;
+    padding: 24px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    max-width: 700px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.problemForm {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.problemForm label {
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.problemForm input[type="text"],
+.problemForm select,
+.problemForm textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+.problemForm textarea {
+    resize: vertical;
+}
+
+.problemForm input[type="file"] {
+    padding: 6px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 0.95rem;
+}
+
+.buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.buttons button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: background-color 0.2s ease;
+}
+
+.buttons button[type="submit"] {
+    background-color: #007acc;
+    color: white;
+}
+
+.buttons button[type="submit"]:hover {
+    background-color: #005f99;
+}
+
+.buttons button[type="button"] {
+    background-color: #ccc;
+    color: #333;
+}
+
+.buttons button[type="button"]:hover {
+    background-color: #aaa;
+}

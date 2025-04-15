@@ -1,0 +1,55 @@
+.register-page {
+    width: 100%;
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background: white;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    text-align: left;
+}
+
+.register-page__title {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: rgb(13, 176, 252);
+    text-align: center;
+}
+
+.register-page__form {
+    display: flex;
+    flex-direction: column;
+}
+
+.register-page__label {
+    margin: 5px 0;
+    font-weight: bold;
+}
+
+.register-page__input {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 90%;
+}
+
+.register-page__button
+.register-page__cancel {
+    padding: 10px;
+    background-color: rgb(13, 176, 252);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: auto;
+}
+
+.register-page__button:hover
+.register-page__cancel:hover {
+    background-color: rgb(10, 150, 220);
+}
+

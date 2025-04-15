@@ -1,0 +1,97 @@
+.headerWrapper {
+    background-color: #1c1f26;
+    color: white;
+    margin: 0;
+    padding: 0;
+    border: none;
+    box-sizing: border-box;
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px 32px;
+    position: relative;
+    background-color: #3333;
+}
+
+.logo {
+    height: 60px;
+}
+
+.languageSelector {
+    position: absolute;
+    right: 32px;
+    cursor: pointer;
+}
+
+.languageSelector img {
+    height: 24px;
+    margin-left: 10px;
+    border-radius: 4px;
+}
+
+.languageDropdown {
+    position: absolute;
+    top: 30px;
+    right: 0;
+    background: #3333;
+    display: none;
+    flex-direction: column;
+    padding: 5px;
+    border-radius: 6px;
+    z-index: 1000;
+}
+
+.languageSelector:hover .languageDropdown {
+    display: flex;
+}
+
+.languageDropdown img {
+    height: 24px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 32px;
+    background-color: #3333;
+    flex-wrap: wrap;
+}
+
+.navLeft,
+.navRight {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.navLeft button,
+.navRight button {
+    background-color: #007acc;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.navLeft button:hover,
+.navRight button:hover {
+    background-color: #005f99;
+}
+
+body,
+html {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f0f0f0;
+}

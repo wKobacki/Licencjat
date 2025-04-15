@@ -1,0 +1,44 @@
+.commentSection {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #ccc;
+    font-family: sans-serif;
+}
+
+.commentForm {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+}
+
+.commentInputContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    background: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 8px 14px;
+    max-width: 600px;
+    width: 100%;
+    gap: 10px;
+}
+
+.textarea {
+    flex-grow: 1;
+    min-width: 0;
+    font-size: 0.95em;
+}
+
+.sendBtn {
+    background-color: #d22b2b;
+    color: white;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+}
+
+.sendBtn:hover {
+    background-color: #a3261e;
+}

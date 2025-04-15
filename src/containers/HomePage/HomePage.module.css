@@ -1,0 +1,107 @@
+.wrapper {
+    font-family: 'Segoe UI', sans-serif;
+    background: #f5f5f5;
+    min-height: 100vh;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: #2f2f2f;
+}
+
+.logo {
+    height: 60px;
+}
+
+.languageSelector {
+    position: relative;
+    cursor: pointer;
+}
+
+.languageSelector img {
+    height: 24px;
+    margin-left: 10px;
+    border-radius: 4px;
+}
+
+.languageDropdown {
+    position: absolute;
+    top: 30px;
+    right: 0;
+    background: #444;
+    display: none;
+    flex-direction: column;
+    padding: 5px;
+    border-radius: 6px;
+    z-index: 1000;
+}
+
+.languageSelector:hover .languageDropdown {
+    display: flex;
+}
+
+.languageDropdown img {
+    height: 24px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 40px;
+    background-color: #2f2f2f;
+}
+
+.navLeft button,
+.navRight button {
+    margin: 0 6px;
+    background-color: #d22b2b;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.navLeft button:hover,
+.navRight button:hover {
+    background-color: #a3261e;
+}
+
+.main {
+    padding: 30px 40px;
+    text-align: center;
+}
+
+.main h2 {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.branchButtons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+}
+
+.branchButtons button {
+    padding: 12px 20px;
+    font-size: 1rem;
+    background-color: #f30000;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    min-width: 180px;
+    transition: background-color 0.2s ease;
+}
+
+.branchButtons button:hover {
+    background-color: #c10000;
+}

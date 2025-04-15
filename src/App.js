@@ -1,25 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Login from './containers/Login/loginPage';
+//import Register from './containers/Login/Register';
+//import ForgotPassword from './containers/Login/ForgotPassword';
+import MyIdeas from './containers/MyIdeas/Myideas';
+import HomePage from './containers/HomePage/HomePage';
+import MainLayout from './layout/MainLayout';
 
-function App() {
+const App = () => {
+  const userRole = localStorage.getItem('userRole');
+  const userEmail = localStorage.getItem('userEmail');
+  const userBranch = localStorage.getItem('userBranch');
+
+  const handleLogout = () => {
+    localStorage.clear();
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        {/* PUBLIC ROUTES */}
+        <Route path="/" element={<Login />} />
+
+        {/* PRIVATE ROUTES z MenuBar */}
+        <Route element={<MainLayout userRole={userRole} onLogout={handleLogout} />}>
+          <Route path="/homePage" element={<HomePage userEmail={userEmail} userRole={userRole} userBranch={userBranch} />} />
+          <Route path='/myIdeas' element={<MyIdeas userEmail={userEmail} userRole={userRole} userBranch={userBranch} />} />
+          {/* Dodasz więcej stron tutaj */}
+        </Route>
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
