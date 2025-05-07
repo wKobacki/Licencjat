@@ -1,17 +1,13 @@
 import React from 'react';
 import { Box, Typography, Button, Stack } from '@mui/material';
 import { Reply, ThumbUp } from '@mui/icons-material';
+import styles from './Comment.module.css';
 
 const Comment = ({ comment, depth, setReplyTo, handleLike }) => {
+    const indentClass = styles[`indent${depth}`] || styles.indent0;
+
     return (
-        <Box sx={{
-            ml: depth * 2,
-            mb: 2,
-            p: 2,
-            border: '1px solid #ccc',
-            borderRadius: 2,
-            backgroundColor: '#f9f9f9',
-        }}>
+        <Box className={`${styles.commentContainer} ${indentClass}`}>
             <Stack direction="row" justifyContent="space-between">
                 <Typography variant="subtitle2">{comment.author_email}</Typography>
                 <Typography variant="caption">
@@ -27,8 +23,12 @@ const Comment = ({ comment, depth, setReplyTo, handleLike }) => {
                 <Button size="small" startIcon={<Reply />} onClick={() => setReplyTo(comment.id)}>
                     Odpowiedz
                 </Button>
-                <Button size="small" startIcon={<ThumbUp />} onClick={handleLike}>
-                    {comment.likes || 0}
+                <Button
+                    size="small"
+                    startIcon={<ThumbUp />}
+                    onClick={() => handleLike(comment.id, comment.likedByCurrentUser)}
+                >
+                    {comment.likes ?? 0} polubień
                 </Button>
             </Stack>
 
@@ -38,7 +38,7 @@ const Comment = ({ comment, depth, setReplyTo, handleLike }) => {
                     comment={reply}
                     depth={depth + 1}
                     setReplyTo={setReplyTo}
-                    handleLike={() => handleLike(reply.id)}
+                    handleLike={handleLike}
                 />
             ))}
         </Box>

@@ -1,0 +1,77 @@
+.verifyContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f2f5;
+    padding: 20px;
+}
+
+.verifyForm {
+    background: #fff;
+    padding: 36px 32px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.verifyForm h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+.verifyForm p {
+    margin-bottom: 16px;
+    color: #555;
+    font-size: 15px;
+}
+
+.verifyForm input {
+    width: 100%;
+    padding: 12px 14px;
+    margin-bottom: 20px;
+    border: 1px solid #dcdcdc;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.verifyForm input:focus {
+    outline: none;
+    border-color: #007acc;
+}
+
+.verifyForm button {
+    width: 100%;
+    background-color: #007acc;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.verifyForm button:hover {
+    background-color: #005a99;
+}
+
+.errorText {
+    color: #e74c3c;
+    font-weight: 500;
+    font-size: 14px;
+    margin-top: 12px;
+}
+
+.successText {
+    color: #2ecc71;
+    font-weight: 500;
+    font-size: 14px;
+    margin-top: 12px;
+}

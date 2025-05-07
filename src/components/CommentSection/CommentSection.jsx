@@ -3,7 +3,7 @@ import { Box, Button, Collapse, Paper, IconButton, TextField } from '@mui/materi
 import { ExpandLess, ExpandMore, Send } from '@mui/icons-material';
 import Comment from './Comment';
 import styles from './CommentSection.module.css';
-import { getComments, postComment, likeComment } from '../../api/IdeasApi/commentsApi';
+import { getComments, postComment, likeComment, unlikeComment } from '../../api/IdeasApi/commentsApi';
 
 const CommentSection = ({ itemId, itemType, userEmail }) => {
     const [comments, setComments] = useState([]);
@@ -37,6 +37,19 @@ const CommentSection = ({ itemId, itemType, userEmail }) => {
         }
     };
 
+    const handleLikeToggle = async (id, alreadyLiked) => {
+        try {
+            if (alreadyLiked) {
+                await unlikeComment(id, userEmail);
+            } else {
+                await likeComment(id, userEmail);
+            }
+            fetchComments();
+        } catch (err) {
+            console.error('Błąd przy przetwarzaniu polubienia:', err);
+        }
+    };
+
     return (
         <Box className={styles.commentSection}>
             <Button
@@ -56,9 +69,7 @@ const CommentSection = ({ itemId, itemType, userEmail }) => {
                             comment={comment}
                             depth={0}
                             setReplyTo={setReplyTo}
-                            handleLike={() => {
-                                likeComment(comment.id, userEmail).then(fetchComments);
-                            }}
+                            handleLike={handleLikeToggle}
                         />
                     ))}
 

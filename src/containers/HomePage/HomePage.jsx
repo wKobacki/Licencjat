@@ -23,7 +23,7 @@ const HomePage = ({ userEmail, userBranch, userRole, onLogout }) => {
             <main className={styles.main}>
                 <h2>{t('Choose idea exchange')}</h2>
                 <div className={styles.branchButtons}>
-                    <button onClick={() => navigate('/ideas-exchange')}>Ogólna giełda</button>
+                    <button onClick={() => navigate('/IdeasExchange')}>Ogólna giełda</button>
                     {branches.map(branch => (
                         <button key={branch} onClick={() => navigate(`/myIdeas`)}>
                             {branch}

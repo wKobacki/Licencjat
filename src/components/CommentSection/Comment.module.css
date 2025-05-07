@@ -1,0 +1,23 @@
+.commentContainer {
+    margin-bottom: 16px;
+    padding: 16px;
+    border: 1px solid #ccc;
+    border-radius: 16px;
+    background-color: #f9f9f9;
+}
+
+.indent0 {
+    margin-left: 0px;
+}
+
+.indent1 {
+    margin-left: 16px;
+}
+
+.indent2 {
+    margin-left: 32px;
+}
+
+.indent3 {
+    margin-left: 48px;
+}

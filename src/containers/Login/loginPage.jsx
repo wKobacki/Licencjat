@@ -1,4 +1,3 @@
-// src/containers/Login/Login.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../../api/AuthApi/authApi';
@@ -21,7 +20,9 @@ const Login = () => {
                 localStorage.setItem('userRole', data.user.role);
                 localStorage.setItem('userEmail', data.user.email);
                 localStorage.setItem('userBranch', data.user.branch);
+                console.log(data.user.role);
                 navigate('/homePage');
+                window.location.reload();
             } else {
                 setError('Nieprawidłowy e-mail lub hasło');
             }
@@ -56,7 +57,7 @@ const Login = () => {
                 Nie masz konta? <span onClick={() => navigate('/register')}>Zarejestruj się</span>
             </p>
             <p className={styles.linkText}>
-                Zapomniałeś hasła? <span onClick={() => navigate('/forgot-password')}>Przywróć je</span>
+                Zapomniałeś hasła? <span onClick={() => navigate('/reset-password')}>Przywróć je</span>
             </p>
         </div>
     );

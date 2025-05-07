@@ -1,0 +1,94 @@
+.registerContainer {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f5f6f8;
+}
+
+.registerForm {
+    background-color: white;
+    padding: 32px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.registerForm h2 {
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.registerForm input,
+.registerForm select {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1em;
+}
+
+.registerForm button {
+    background-color: #007acc;
+    color: white;
+    padding: 10px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.registerForm button:hover {
+    background-color: #005b9a;
+}
+
+.linkText {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 0.9em;
+}
+
+.linkText span {
+    color: #007acc;
+    cursor: pointer;
+}
+
+.errorText {
+    color: red;
+    font-size: 0.85em;
+    text-align: center;
+}
+
+.passwordHints {
+    font-size: 0.85em;
+    list-style: none;
+    padding: 0;
+    margin: 8px 0;
+}
+
+.passwordHints li {
+    margin-bottom: 4px;
+}
+
+.valid {
+    color: green;
+}
+
+.invalid {
+    color: red;
+}
+
+.validIcon {
+    color: #2ecc71;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+.invalidIcon {
+    color: #e74c3c;
+    margin-right: 5px;
+    vertical-align: middle;
+}

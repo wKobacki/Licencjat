@@ -1,18 +1,22 @@
-// src/components/MenuBar/MenuBar.jsx
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import styles from './MenuBar.module.css';
-import logo from '../../assets/images/comingsoon.png';
+import logo from '../../assets/images/logo.png';
 import polandFlag from '../../assets/images/Poland.png';
 import ukFlag from '../../assets/images/UK.png';
 import ukraineFlag from '../../assets/images/UKR.jpg';
 import { LanguageContext } from '../../i18n/contexts/LanguageContext';
 
-const MenuBar = ({ userRole, onLogout }) => {
+const MenuBar = ({ userRole }) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { flag, changeLanguage } = useContext(LanguageContext);
+
+    const handleLogout = () => {
+        localStorage.clear();
+        navigate('/');
+    };
 
     return (
         <div className={styles.headerWrapper}>
@@ -31,8 +35,7 @@ const MenuBar = ({ userRole, onLogout }) => {
             <nav className={styles.nav}>
                 <div className={styles.navLeft}>
                     <button onClick={() => navigate('/HomePage')}>{t('Department')}</button>
-                    <button onClick={() => navigate('/improvementsChart')}>{t('Chart')}</button>
-                    {(userRole === 'manager' || userRole ==='admin') && (
+                    {(userRole === 'manager' || userRole === 'admin') && (
                         <button onClick={() => navigate('/admin/ideas')}>{t('Manage Ideas')}</button>
                     )}
                     {userRole === 'admin' && (
@@ -40,8 +43,8 @@ const MenuBar = ({ userRole, onLogout }) => {
                     )}
                 </div>
                 <div className={styles.navRight}>
-                    <button onClick={() => navigate('/changePas')}>{t('Change password')}</button>
-                    <button onClick={onLogout}>{t('Logout')}</button>
+                    <button onClick={() => navigate('/ForgotPassword')}>{t('Change password')}</button>
+                    <button onClick={handleLogout}>{t('Logout')}</button>
                 </div>
             </nav>
         </div>
