@@ -1,35 +1,55 @@
 import React, { useEffect, useState } from 'react';
 import styles from './IdeasExchange.module.css';
-import { fetchIdeas, voteForIdea, submitIdea, fetchUserBlockStatus } from '../../api/IdeasApi/ideasExchangeApi';
+import {
+    fetchIdeas,
+    voteForIdea,
+    submitIdea,
+    fetchUserBlockStatus
+} from '../../api/IdeasApi/ideasExchangeApi';
 import MyIdeaForm from '../../components/MyIdeaForm/myIdeaForm';
 import { useTranslation } from 'react-i18next';
 import CommentSection from '../../components/CommentSection/CommentSection';
+import Lightbox from 'yet-another-react-lightbox';
+import 'yet-another-react-lightbox/styles.css';
 
 const IdeasExchange = () => {
     const { t } = useTranslation();
     const userEmail = localStorage.getItem('userEmail');
     const userBranch = localStorage.getItem('userBranch');
+
     const [ideas, setIdeas] = useState([]);
     const [loading, setLoading] = useState(true);
     const [votedIdeas, setVotedIdeas] = useState([]);
     const [showForm, setShowForm] = useState(false);
     const [isBlocked, setIsBlocked] = useState(false);
+    const [lightboxOpen, setLightboxOpen] = useState(false);
+    const [lightboxImages, setLightboxImages] = useState([]);
+    const [lightboxIndex, setLightboxIndex] = useState(0);
 
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
+
             if (!userBranch || !userEmail) {
                 console.warn('Brak danych użytkownika w localStorage.');
                 setIdeas([]);
                 setLoading(false);
                 return;
             }
-            const data = await fetchIdeas(userBranch, userEmail);
-            if (Array.isArray(data.ideas)) {
-                setIdeas(data.ideas);
-            } else {
+
+            try {
+                const fetchedIdeas = await fetchIdeas(userEmail);
+                setIdeas(fetchedIdeas);
+
+                const voted = fetchedIdeas
+                    .filter(idea => idea.hasVoted)
+                    .map(idea => idea.id);
+                setVotedIdeas(voted);
+            } catch (error) {
+                console.error('Błąd podczas pobierania pomysłów:', error);
                 setIdeas([]);
             }
+
             setLoading(false);
         };
 
@@ -44,12 +64,24 @@ const IdeasExchange = () => {
 
     const handleVote = async (ideaId) => {
         try {
-            await voteForIdea(ideaId, userEmail);
-            setVotedIdeas(prev =>
-                prev.includes(ideaId)
-                    ? prev.filter(id => id !== ideaId)
-                    : [...prev, ideaId]
-            );
+            const res = await voteForIdea(ideaId, userEmail);
+            if (res && typeof res.totalVotes === 'number') {
+                setVotedIdeas(prev =>
+                    prev.includes(ideaId)
+                        ? prev.filter(id => id !== ideaId)
+                        : [...prev, ideaId]
+                );
+
+                setIdeas(prevIdeas =>
+                    prevIdeas.map(idea =>
+                        idea.id === ideaId
+                            ? { ...idea, votes: res.totalVotes }
+                            : idea
+                    )
+                );
+            } else {
+                console.warn('Nieprawidłowa odpowiedź z backendu:', res);
+            }
         } catch (e) {
             console.error('Błąd przy głosowaniu:', e);
         }
@@ -78,9 +110,15 @@ const IdeasExchange = () => {
         }[status] || '';
     };
 
+    const openLightbox = (images, index) => {
+        const fullPaths = images.map(img => ({ src: `http://localhost:5000${img}` }));
+        setLightboxImages(fullPaths);
+        setLightboxIndex(index);
+        setLightboxOpen(true);
+    };
+
     return (
         <div className={styles.container}>
-
             {!isBlocked ? (
                 <div className={styles.centerButton}>
                     <button className={styles.addButton} onClick={() => setShowForm(true)}>
@@ -115,14 +153,15 @@ const IdeasExchange = () => {
                             <p>{idea.description}</p>
                             <p>{idea.solution}</p>
 
-                            {idea.images && (
+                            {idea.images?.length > 0 && (
                                 <div className={styles.imageGallery}>
                                     {idea.images.map((img, idx) => (
                                         <img
                                             key={idx}
-                                            src={`http://localhost:5000/uploads/${img}`}
+                                            src={`http://localhost:5000${img}`}
                                             alt={`idea-${idx}`}
                                             className={styles.thumbnail}
+                                            onClick={() => openLightbox(idea.images, idx)}
                                         />
                                     ))}
                                 </div>
@@ -148,6 +187,18 @@ const IdeasExchange = () => {
                         </div>
                     ))}
                 </div>
+            )}
+
+            {lightboxOpen && (
+                <Lightbox
+                    open={lightboxOpen}
+                    close={() => setLightboxOpen(false)}
+                    slides={lightboxImages}
+                    index={lightboxIndex}
+                    on={{
+                        view: ({ index }) => setLightboxIndex(index),
+                    }}
+                />
             )}
         </div>
     );

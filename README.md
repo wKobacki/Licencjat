@@ -73,101 +73,121 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 data base to this project:
 
 
+CREATE DATABASE IF NOT EXISTS ideas_stock;
+USE ideas_stock;
+
+-- Tabela: users
 CREATE TABLE users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    email VARCHAR(255) UNIQUE NOT NULL,
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    role ENUM('user', 'admin') NOT NULL,
-    name VARCHAR(255),
-    surname VARCHAR(255),
+    role ENUM('user', 'manager', 'admin') NOT NULL,
+    name VARCHAR(100),
+    surname VARCHAR(100),
     branch VARCHAR(255),
-    isVerified TINYINT DEFAULT 0,
-    isBlocked TINYINT DEFAULT 0
+    isVerified TINYINT(1),
+    isBlocked TINYINT(1)
 );
 
+-- Tabela: verification_codes
 CREATE TABLE verification_codes (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255) NOT NULL,
-    code VARCHAR(255) NOT NULL,
+    code VARCHAR(6) NOT NULL,
     expiresAt DATETIME NOT NULL,
-    FOREIGN KEY (email) REFERENCES users(email) ON DELETE CASCADE
+    FOREIGN KEY (email) REFERENCES users(email)
 );
 
-CREATE TABLE problems (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(255),
-    department VARCHAR(255),
-    description TEXT,
-    solution TEXT,
-    images TEXT,
-    branch VARCHAR(255),
-    author_email VARCHAR(255),
-    isPublished TINYINT DEFAULT 0,
-    status ENUM('open', 'in_progress', 'closed') DEFAULT 'open',
-    votes INT DEFAULT 0,
-    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-    archived TINYINT DEFAULT 0,
-    FOREIGN KEY (author_email) REFERENCES users(email) ON DELETE SET NULL
+-- Tabela: reset_tokens
+CREATE TABLE reset_tokens (
+    email VARCHAR(255) NOT NULL PRIMARY KEY,
+    code VARCHAR(6) NOT NULL,
+    expiresAt DATETIME NOT NULL,
+    FOREIGN KEY (email) REFERENCES users(email)
 );
 
+-- Tabela: ideas
 CREATE TABLE ideas (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255),
-    description TEXT,
-    branch VARCHAR(255),
-    author_email VARCHAR(255),
-    status ENUM('new', 'approved', 'rejected') DEFAULT 'new',
-    votes INT DEFAULT 0,
     department VARCHAR(255),
+    description TEXT,
     solution TEXT,
     images TEXT,
+    branch VARCHAR(255),
+    author_email VARCHAR(255),
+    isPublished TINYINT(1),
+    status VARCHAR(50),
+    votes INT,
     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-    isPublished TINYINT DEFAULT 0,
-    archived TINYINT DEFAULT 0,
-    FOREIGN KEY (author_email) REFERENCES users(email) ON DELETE SET NULL
+    archived TINYINT(1),
+    FOREIGN KEY (author_email) REFERENCES users(email)
 );
 
+-- Tabela: problems
+CREATE TABLE problems (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    department VARCHAR(255),
+    description TEXT NOT NULL,
+    solution TEXT,
+    images TEXT,
+    branch VARCHAR(255),
+    author_email VARCHAR(255) NOT NULL,
+    isPublished TINYINT(1),
+    status ENUM('pending', 'in_voting', 'in_progress', 'completed', 'rejected'),
+    votes INT,
+    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    archived TINYINT(1),
+    FOREIGN KEY (author_email) REFERENCES users(email)
+);
+
+-- Tabela: votes_ideas
+CREATE TABLE votes_ideas (
+    user_email VARCHAR(255) NOT NULL,
+    idea_id INT NOT NULL,
+    PRIMARY KEY (user_email, idea_id),
+    FOREIGN KEY (user_email) REFERENCES users(email),
+    FOREIGN KEY (idea_id) REFERENCES ideas(id)
+);
+
+-- Tabela: votes_problems
+CREATE TABLE votes_problems (
+    user_email VARCHAR(255) NOT NULL,
+    problem_id INT NOT NULL,
+    PRIMARY KEY (user_email, problem_id),
+    FOREIGN KEY (user_email) REFERENCES users(email),
+    FOREIGN KEY (problem_id) REFERENCES problems(id)
+);
+
+-- Tabela: user_votes
+CREATE TABLE user_votes (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_email VARCHAR(255) NOT NULL,
+    item_id INT NOT NULL,
+    item_type ENUM('idea', 'problem') NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_email) REFERENCES users(email)
+);
+
+-- Tabela: comments
 CREATE TABLE comments (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     item_id INT NOT NULL,
     item_type ENUM('idea', 'problem') NOT NULL,
     parent_id INT,
-    author_email VARCHAR(255),
+    author_email VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (author_email) REFERENCES users(email) ON DELETE SET NULL,
-    FOREIGN KEY (parent_id) REFERENCES comments(id) ON DELETE CASCADE
+    likes INT,
+    FOREIGN KEY (author_email) REFERENCES users(email)
 );
 
+-- Tabela: comment_likes
 CREATE TABLE comment_likes (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    comment_id INT NOT NULL,
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    comment_id INT,
     user_email VARCHAR(255),
-    FOREIGN KEY (comment_id) REFERENCES comments(id) ON DELETE CASCADE,
-    FOREIGN KEY (user_email) REFERENCES users(email) ON DELETE CASCADE
-);
-
-CREATE TABLE user_votes (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_email VARCHAR(255),
-    item_id INT,
-    item_type ENUM('idea', 'problem') NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_email) REFERENCES users(email) ON DELETE CASCADE
-);
-
-CREATE TABLE votes_ideas (
-    user_email VARCHAR(255),
-    idea_id INT,
-    PRIMARY KEY (user_email, idea_id),
-    FOREIGN KEY (user_email) REFERENCES users(email) ON DELETE CASCADE,
-    FOREIGN KEY (idea_id) REFERENCES ideas(id) ON DELETE CASCADE
-);
-
-CREATE TABLE votes_problems (
-    user_email VARCHAR(255),
-    problem_id INT,
-    PRIMARY KEY (user_email, problem_id),
-    FOREIGN KEY (user_email) REFERENCES users(email) ON DELETE CASCADE,
-    FOREIGN KEY (problem_id) REFERENCES problems(id) ON DELETE CASCADE
+    FOREIGN KEY (comment_id) REFERENCES comments(id),
+    FOREIGN KEY (user_email) REFERENCES users(email)
 );

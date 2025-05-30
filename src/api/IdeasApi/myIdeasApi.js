@@ -13,16 +13,22 @@ export const getProblemsByBranch = async (branch, userEmail) => {
 export const submitProblem = async (formData, userEmail) => {
     const response = await fetch(`${API_URL}/submitProblem`, {
         method: 'POST',
-        headers: { 'x-user-email': userEmail },
+        headers: {
+            'x-user-email': userEmail
+        },
         body: formData
     });
+
     return await response.json();
 };
 
 export const voteForProblem = async (problemId, userEmail) => {
     const response = await fetch(`${API_URL}/problems/${problemId}/vote`, {
         method: 'POST',
-        headers: { 'x-user-email': userEmail }
+        headers: {
+            'x-user-email': userEmail 
+        }
     });
+
     return await response.json();
 };

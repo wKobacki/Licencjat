@@ -1,22 +1,25 @@
 .container {
-    padding: 24px;
+    padding: 3% 2.5%;
+    padding-top: calc(60px + 5vh); /* menu bar wysokość + przestrzeń */
     background-color: #f5f6f8;
 }
 
 h3 {
     margin-top: 0;
+    font-size: 1.3rem;
 }
 
 .addButton {
     background-color: #007acc;
     color: white;
-    padding: 10px 16px;
+    padding: 0.6em 1em;
     border: none;
-    border-radius: 6px;
+    border-radius: 0.6em;
     cursor: pointer;
-    margin-bottom: 20px;
+    margin-bottom: 2%;
     font-weight: bold;
     transition: background 0.3s;
+    font-size: 1rem;
 }
 
 .addButton:hover {
@@ -25,27 +28,27 @@ h3 {
 
 .problemList {
     display: grid;
-    gap: 24px;
+    gap: 2.5%;
 }
 
 .problemCard {
     background: white;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
-    position: relative; 
+    border-radius: 1em;
+    padding: 2%;
+    box-shadow: 0 0.2em 0.6em rgba(0, 0, 0, 0.08);
+    position: relative;
 }
 
 .statusTag {
     font-weight: bold;
     color: white;
-    padding: 4px 12px;
-    border-radius: 20px;
+    padding: 0.3em 1em;
+    border-radius: 2em;
     font-size: 0.8em;
     text-transform: uppercase;
-    position: absolute;      
-    top: 16px;                
-    right: 16px;              
+    position: absolute;
+    top: 1em;
+    right: 1em;
 }
 
 .status-in_progress {
@@ -65,34 +68,35 @@ h3 {
 }
 
 .imageGallery {
-    margin: 10px 0;
+    margin: 1em 0;
     display: flex;
-    gap: 10px;
+    gap: 1em;
     flex-wrap: wrap;
 }
 
 .thumbnail {
-    width: 100px;
-    height: 100px;
+    width: 6.5rem;
+    height: 6.5rem;
     object-fit: cover;
-    border-radius: 6px;
+    border-radius: 0.5em;
 }
 
 .voteButtonContainer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 16px;
+    margin-top: 1.5em;
 }
 
 .voteButton {
     background-color: #007acc;
     color: white;
     border: none;
-    padding: 8px 18px;
-    border-radius: 5px;
+    padding: 0.6em 1.2em;
+    border-radius: 0.4em;
     font-weight: 600;
     cursor: pointer;
+    font-size: 0.95rem;
 }
 
 .voteButton:hover {
@@ -111,14 +115,58 @@ h3 {
 .centerButton {
     display: flex;
     justify-content: center;
-    margin-bottom: 20px;
+    margin-bottom: 2em;
 }
 
 .blockedMessage {
     color: #c0392b;
     background-color: #f9d6d5;
-    padding: 12px;
-    border-radius: 8px;
+    padding: 1em;
+    border-radius: 0.6em;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 2em;
+    font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 4% 3%;
+        padding-top: calc(60px + 6vh);
+    }
+
+    .problemList {
+        gap: 1.5em;
+    }
+
+    .problemCard {
+        padding: 5%;
+    }
+
+    .thumbnail {
+        width: 5rem;
+        height: 5rem;
+    }
+
+    .voteButtonContainer {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1em;
+    }
+
+    .voteButton,
+    .voteCount {
+        width: 100%;
+        text-align: center;
+    }
+
+    .addButton {
+        width: 100%;
+        font-size: 1.1rem;
+    }
+
+    .statusTag {
+        font-size: 0.75em;
+        top: 0.6em;
+        right: 0.6em;
+    }
 }

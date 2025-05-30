@@ -5,6 +5,10 @@ import { fetchUserBlockStatus } from '../../api/IdeasApi/ideasExchangeApi';
 import MyIdeaForm from '../../components/MyIdeaForm/myIdeaForm';
 import { useTranslation } from 'react-i18next';
 import CommentSection from '../../components/CommentSection/CommentSection';
+import Lightbox from 'yet-another-react-lightbox';
+import "yet-another-react-lightbox/styles.css";
+import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
+import "yet-another-react-lightbox/plugins/thumbnails.css";
 
 const MyIdeas = () => {
     const { t } = useTranslation();
@@ -16,6 +20,9 @@ const MyIdeas = () => {
     const [votedProblems, setVotedProblems] = useState([]);
     const [showForm, setShowForm] = useState(false);
     const [isBlocked, setIsBlocked] = useState(false);
+    const [lightboxOpen, setLightboxOpen] = useState(false);
+    const [lightboxSlides, setLightboxSlides] = useState([]);
+    const [currentIndex, setCurrentIndex] = useState(0);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -23,15 +30,19 @@ const MyIdeas = () => {
             if (!userBranch || !userEmail) {
                 console.warn('Brak danych użytkownika w localStorage.');
                 setProblems([]);
+                setVotedProblems([]);
                 setLoading(false);
                 return;
             }
+
             const problemsData = await getProblemsByBranch(userBranch, userEmail);
-            if (Array.isArray(problemsData.problems)) {
-                setProblems(problemsData.problems);
-            } else {
-                setProblems([]);
-            }
+            const fetchedProblems = Array.isArray(problemsData.problems) ? problemsData.problems : [];
+
+            setProblems(fetchedProblems);
+
+            const voted = fetchedProblems.filter(p => p.hasVoted).map(p => p.id);
+            setVotedProblems(voted);
+
             setLoading(false);
         };
 
@@ -46,12 +57,24 @@ const MyIdeas = () => {
 
     const handleVote = async (problemId) => {
         try {
-            await voteForProblem(problemId, userEmail);
-            setVotedProblems(prev =>
-                prev.includes(problemId)
-                    ? prev.filter(id => id !== problemId)
-                    : [...prev, problemId]
-            );
+            const res = await voteForProblem(problemId, userEmail);
+            if (res && typeof res.totalVotes === 'number') {
+                setVotedProblems(prev =>
+                    prev.includes(problemId)
+                        ? prev.filter(id => id !== problemId)
+                        : [...prev, problemId]
+                );
+
+                setProblems(prevProblems =>
+                    prevProblems.map(problem =>
+                        problem.id === problemId
+                            ? { ...problem, votes: res.totalVotes }
+                            : problem
+                    )
+                );
+            } else {
+                console.warn('Nieprawidłowa odpowiedź z backendu:', res);
+            }
         } catch (e) {
             console.error('Błąd przy głosowaniu:', e);
         }
@@ -69,7 +92,11 @@ const MyIdeas = () => {
     const handleSubmit = async (e, files) => {
         e.preventDefault();
         const form = e.target;
-        const formData = new FormData(form);
+        const formData = new FormData();
+        formData.append('title', form.title.value);
+        formData.append('department', form.department.value);
+        formData.append('description', form.description.value);
+        formData.append('solution', form.solution.value);
         formData.append('branch', userBranch);
         files.forEach(file => formData.append('images', file));
 
@@ -86,9 +113,15 @@ const MyIdeas = () => {
         window.location.reload();
     };
 
+    const openLightbox = (images, index) => {
+        const slides = images.map(img => ({ src: `http://localhost:5000${img}` }));
+        setLightboxSlides(slides);
+        setCurrentIndex(index);
+        setLightboxOpen(true);
+    };
+
     return (
         <div className={styles.container}>
-
             {!isBlocked ? (
                 <div className={styles.centerButton}>
                     <button className={styles.addButton} onClick={() => setShowForm(true)}>
@@ -123,14 +156,15 @@ const MyIdeas = () => {
                             <p>{problem.description}</p>
                             <p>{problem.solution}</p>
 
-                            {problem.images && (
+                            {problem.images?.length > 0 && (
                                 <div className={styles.imageGallery}>
                                     {problem.images.map((img, idx) => (
                                         <img
                                             key={idx}
-                                            src={`http://localhost:5000/uploads/${img}`}
+                                            src={`http://localhost:5000${img}`}
                                             alt={`problem-${idx}`}
                                             className={styles.thumbnail}
+                                            onClick={() => openLightbox(problem.images, idx)}
                                         />
                                     ))}
                                 </div>
@@ -156,6 +190,17 @@ const MyIdeas = () => {
                         </div>
                     ))}
                 </div>
+            )}
+
+            {lightboxOpen && (
+                <Lightbox
+                    open={lightboxOpen}
+                    close={() => setLightboxOpen(false)}
+                    slides={lightboxSlides}
+                    index={currentIndex}
+                    on={{ view: ({ index }) => setCurrentIndex(index) }}
+                    plugins={[Thumbnails]}
+                />
             )}
         </div>
     );

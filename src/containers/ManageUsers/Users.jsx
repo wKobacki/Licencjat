@@ -46,8 +46,25 @@ const Users = ({ userEmail }) => {
     };
 
     const handleBranchChange = async (id, newBranch) => {
-        await updateUserBranch(id, newBranch, userEmail);
-        loadUsers();
+        setUsers(prevUsers =>
+            prevUsers.map(user =>
+                user.id === id ? { ...user, branch: newBranch } : user
+            )
+        );
+
+        try {
+            await updateUserBranch(id, newBranch, userEmail);
+
+            const currentUserEmail = localStorage.getItem('userEmail');
+            const updatedUser = users.find(u => u.id === id);
+            if (updatedUser && updatedUser.email === currentUserEmail) {
+                localStorage.setItem('userBranch', newBranch);
+            }
+
+            await loadUsers();
+        } catch (err) {
+            console.error('Błąd przy zmianie oddziału:', err);
+        }
     };
 
     const filteredUsers = users.filter((u) =>
@@ -63,7 +80,6 @@ const Users = ({ userEmail }) => {
 
     return (
         <div className={styles.container}>
-            <h2 className={styles.title}>Zarządzanie użytkownikami</h2>
 
             <div className={styles.searchBarWrapper}>
                 <input
@@ -80,7 +96,7 @@ const Users = ({ userEmail }) => {
                     <li key={u.id} className={styles.userCard}>
                         <div className={styles.userDetails}>
                             <strong>{u.name} {u.surname}</strong> ({u.email})<br />
-                            <span>Rola:</span> {u.role} | <span>Oddział:</span> {u.branch} | <span>Zablokowany:</span> {u.isBlocked ? 'Tak' : 'Nie'}
+                            <span>Oddział:</span> {u.branch} | <span>Zablokowany:</span> {u.isBlocked ? 'Tak' : 'Nie'}
                         </div>
                         <div className={styles.userActions}>
                             <select

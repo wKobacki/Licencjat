@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import styles from './myIdeaForm.module.css';
+import { Trash2 } from 'lucide-react';
 
 const MyIdeaForm = ({ t, handleSubmit, handleCancel, branchFromQuery }) => {
     const [files, setFiles] = useState([]);
@@ -20,6 +21,10 @@ const MyIdeaForm = ({ t, handleSubmit, handleCancel, branchFromQuery }) => {
         e.preventDefault();
     };
 
+    const removeFile = (index) => {
+        setFiles(prev => prev.filter((_, i) => i !== index));
+    };
+
     return (
         <section className={styles.formSection}>
             <form className={styles.problemForm} onSubmit={(e) => handleSubmit(e, files)} encType="multipart/form-data">
@@ -27,8 +32,18 @@ const MyIdeaForm = ({ t, handleSubmit, handleCancel, branchFromQuery }) => {
                 <input type="text" id="title" name="title" maxLength="55" required />
 
                 <label htmlFor="department">{t('Select Department')}</label>
-                <select id="department" name="department" required>
-                    {["Safety improvement", "Quality improvement", "Efficiency improvement", "Increasing profits", "Communication improvement", "Deadline improvements", "Renovation, modernization and company image", "Loss reducing", "Cost reducing"].map((dept) => (
+                <select id="department" name="department" required defaultValue={branchFromQuery || ''}>
+                    {[
+                        'Safety improvement',
+                        'Quality improvement',
+                        'Efficiency improvement',
+                        'Increasing profits',
+                        'Communication improvement',
+                        'Deadline improvements',
+                        'Renovation, modernization and company image',
+                        'Loss reducing',
+                        'Cost reducing',
+                    ].map((dept) => (
                         <option key={dept} value={dept}>{t(dept)}</option>
                     ))}
                 </select>
@@ -46,9 +61,18 @@ const MyIdeaForm = ({ t, handleSubmit, handleCancel, branchFromQuery }) => {
                     onDragOver={handleDragOver}
                     onClick={() => fileInputRef.current.click()}
                 >
-                    {files.length === 0
-                        ? t('Drag & drop files here or click to select')
-                        : files.map((file) => <div key={file.name}>{file.name}</div>)}
+                    {files.length === 0 ? (
+                        <p>{t('Drag & drop files here or click to select')}</p>
+                    ) : (
+                        <ul className={styles.previewList}>
+                            {files.map((file, index) => (
+                                <li key={file.name} className={styles.previewItem}>
+                                    <span>{file.name}</span>
+                                    <Trash2 className={styles.trashIcon} onClick={(e) => { e.stopPropagation(); removeFile(index); }} />
+                                </li>
+                            ))}
+                        </ul>
+                    )}
                 </div>
                 <input
                     ref={fileInputRef}
@@ -62,8 +86,8 @@ const MyIdeaForm = ({ t, handleSubmit, handleCancel, branchFromQuery }) => {
                 />
 
                 <div className={styles.buttons}>
-                    <button type="submit">{t('Submit')}</button>
-                    <button type="button" onClick={handleCancel}>{t('Cancel')}</button>
+                    <button type="submit" className={styles.submit}>{t('Submit')}</button>
+                    <button type="button" onClick={handleCancel} className={styles.cancel}>{t('Cancel')}</button>
                 </div>
             </form>
         </section>

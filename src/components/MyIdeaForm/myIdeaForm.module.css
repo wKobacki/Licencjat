@@ -1,31 +1,35 @@
 .formSection {
-    margin: 20px auto;
-    padding: 24px;
+    margin: 4vh auto;
+    padding: 3%;
     background-color: #ffffff;
-    border-radius: 10px;
-    max-width: 700px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 1em;
+    max-width: 95%;
+    width: 100%;
+    box-shadow: 0 0.4em 1.2em rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
 }
 
 .problemForm {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 1.5em;
 }
 
 .problemForm label {
     font-weight: 500;
-    margin-bottom: 4px;
+    margin-bottom: 0.5em;
 }
 
 .problemForm input[type="text"],
 .problemForm select,
 .problemForm textarea {
-    padding: 10px;
+    padding: 0.8em;
     border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 1rem;
+    border-radius: 0.6em;
+    font-size: 1em;
     font-family: inherit;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .problemForm textarea {
@@ -33,27 +37,31 @@
 }
 
 .problemForm input[type="file"] {
-    padding: 6px;
+    padding: 0.5em;
     background-color: #f0f0f0;
     border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 0.95rem;
+    border-radius: 0.6em;
+    font-size: 0.95em;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .buttons {
     display: flex;
     justify-content: flex-end;
-    gap: 12px;
+    gap: 1em;
+    flex-wrap: wrap;
 }
 
 .buttons button {
-    padding: 8px 16px;
+    padding: 0.6em 1.2em;
     border: none;
-    border-radius: 6px;
+    border-radius: 0.6em;
     cursor: pointer;
     font-weight: 500;
-    font-size: 1rem;
+    font-size: 1em;
     transition: background-color 0.2s ease;
+    white-space: nowrap;
 }
 
 .buttons button[type="submit"] {
@@ -72,4 +80,46 @@
 
 .buttons button[type="button"]:hover {
     background-color: #aaa;
+}
+
+.dropZone {
+    border: 0.2em dashed #aaa;
+    border-radius: 0.8em;
+    padding: 3%;
+    text-align: center;
+    background-color: #f9f9f9;
+    color: #555;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.dropZone:hover {
+    background-color: #f1f1f1;
+}
+
+.previewList {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 1em;
+}
+
+.previewItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f0f0f0;
+    padding: 0.6em 1em;
+    border-radius: 0.6em;
+    margin-bottom: 0.6em;
+    font-size: 0.95em;
+}
+
+.trashIcon {
+    cursor: pointer;
+    color: #d9534f;
+    transition: color 0.2s ease;
+}
+
+.trashIcon:hover {
+    color: #a94442;
 }

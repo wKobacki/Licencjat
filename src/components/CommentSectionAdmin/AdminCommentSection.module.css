@@ -1,0 +1,58 @@
+.container {
+    margin-top: 3vh;
+    background-color: #f9f9f9;
+    padding: 2%;
+    border-radius: 1.2em;
+    width: 96%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.comment {
+    margin-bottom: 2vh;
+    border-left: 0.3em solid #ccc;
+    padding-left: 1.5%;
+}
+
+.meta {
+    font-size: 0.85em;
+    color: #555;
+    margin-bottom: 0.5em;
+}
+
+.actions {
+    margin-top: 1vh;
+    display: flex;
+    gap: 2%;
+    flex-wrap: wrap;
+}
+
+.toggleButton {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 0.6em 1.2em;
+    border-radius: 0.6em;
+    cursor: pointer;
+    font-size: 0.85em;
+    white-space: nowrap;
+}
+
+.toggleButton:hover {
+    background-color: #5a6268;
+}
+
+.deleteButton {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 0.6em 1.4em;
+    border-radius: 0.6em;
+    cursor: pointer;
+    font-size: 0.85em;
+    white-space: nowrap;
+}
+
+.deleteButton:hover {
+    background-color: #c82333;
+}

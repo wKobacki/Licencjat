@@ -1,0 +1,120 @@
+.container {
+    padding: 3% 2.5%;
+    padding-top: calc(60px + 10vh);
+    background-color: #f5f6f8;
+    max-width: 90%;
+    margin: 0 auto;
+}
+
+h2 {
+    margin-bottom: 3%;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.filterBar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5%;
+    margin-bottom: 3%;
+}
+
+.filterBar input[type="text"] {
+    flex: 2;
+    min-width: 20%;
+    max-width: 35%;
+    padding: 0.8em 1.2em;
+    border-radius: 0.6em;
+    border: 0.1em solid #ccc;
+    font-size: 1em;
+    box-sizing: border-box;
+}
+
+.filterBar select {
+    flex: 1;
+    min-width: 15%;
+    max-width: 20%;
+    padding: 0.7em 1.2em;
+    border-radius: 0.6em;
+    border: 0.1em solid #ccc;
+    font-size: 0.95em;
+    white-space: nowrap;
+}
+
+.filterBar button {
+    padding: 0.75em 1.5em;
+    border-radius: 0.6em;
+    font-size: 0.9em;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    white-space: nowrap;
+    transition: background-color 0.3s ease;
+}
+
+.filterBar input[type="text"]:focus,
+.filterBar select:focus {
+    border-color: #007acc;
+    outline: none;
+}
+
+.filterBar label {
+    font-size: 0.95em;
+    display: flex;
+    align-items: center;
+    gap: 1%;
+    color: #333;
+    white-space: nowrap;
+}
+
+.ideaList {
+    display: flex;
+    flex-direction: column;
+    gap: 3%;
+}
+
+.toggleButton {
+    background-color: #007acc;
+    color: white;
+}
+
+.toggleButton:hover {
+    background-color: #005b9a;
+}
+
+.exportButton {
+    background-color: #6c757d;
+    color: white;
+    font-weight: 600;
+}
+
+.exportButton:hover {
+    background-color: #5a6268;
+}
+
+@media (max-width: 768px) {
+    .filterBar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+    }
+
+    .filterBar input[type="text"],
+    .filterBar select,
+    .filterBar button {
+        width: 100%;
+        font-size: 1em;
+    }
+
+    .toggleButton,
+    .exportButton {
+        width: 100%;
+        text-align: center;
+    }
+
+    h2 {
+        font-size: 1.2rem;
+    }
+}

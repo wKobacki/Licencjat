@@ -49,7 +49,7 @@ const ForgotPassword = () => {
             const response = await changePassword(email, formData.oldPassword, formData.newPassword);
             if (response.success) {
                 setSuccess('Hasło zostało zmienione.');
-                setTimeout(() => navigate('/'), 2000);
+                setTimeout(() => navigate('/'), 200);
             } else {
                 setError(response.message || 'Błąd przy zmianie hasła.');
             }
@@ -62,7 +62,7 @@ const ForgotPassword = () => {
     return (
         <div className={styles.container}>
             <form onSubmit={handleSubmit} className={styles.form}>
-                <h2>Zmiana hasła</h2>
+                <h2 className={styles.heading}>Zmiana hasła</h2>
                 <input
                     type="password"
                     name="oldPassword"
@@ -70,6 +70,7 @@ const ForgotPassword = () => {
                     value={formData.oldPassword}
                     onChange={handleChange}
                     required
+                    className={styles.input}
                 />
                 <input
                     type="password"
@@ -78,6 +79,7 @@ const ForgotPassword = () => {
                     value={formData.newPassword}
                     onChange={handleChange}
                     required
+                    className={styles.input}
                 />
                 <input
                     type="password"
@@ -86,19 +88,20 @@ const ForgotPassword = () => {
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     required
+                    className={styles.input}
                 />
 
                 <ul className={styles.passwordRules}>
-                    <li>{renderIcon(checks.length)} Min. 8 znaków</li>
-                    <li>{renderIcon(checks.upper)} Duża litera</li>
-                    <li>{renderIcon(checks.lower)} Mała litera</li>
-                    <li>{renderIcon(checks.digit)} Cyfra</li>
-                    <li>{renderIcon(checks.special)} Znak specjalny</li>
+                    <li className={styles.ruleItem}>{renderIcon(checks.length)} <span className={styles.ruleText}>Min. 8 znaków</span></li>
+                    <li className={styles.ruleItem}>{renderIcon(checks.upper)} <span className={styles.ruleText}>Duża litera</span></li>
+                    <li className={styles.ruleItem}>{renderIcon(checks.lower)} <span className={styles.ruleText}>Mała litera</span></li>
+                    <li className={styles.ruleItem}>{renderIcon(checks.digit)} <span className={styles.ruleText}>Cyfra</span></li>
+                    <li className={styles.ruleItem}>{renderIcon(checks.special)} <span className={styles.ruleText}>Znak specjalny</span></li>
                 </ul>
 
                 {error && <p className={styles.error}>{error}</p>}
                 {success && <p className={styles.success}>{success}</p>}
-                <button type="submit">Zmień hasło</button>
+                <button type="submit" className={styles.submitButton}>Zmień hasło</button>
             </form>
         </div>
     );

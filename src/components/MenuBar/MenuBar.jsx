@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import styles from './MenuBar.module.css';
-import logo from '../../assets/images/logo.png';
 import polandFlag from '../../assets/images/Poland.png';
 import ukFlag from '../../assets/images/UK.png';
 import ukraineFlag from '../../assets/images/UKR.jpg';
@@ -21,7 +20,8 @@ const MenuBar = ({ userRole }) => {
     return (
         <div className={styles.headerWrapper}>
             <header className={styles.header}>
-                <img src={logo} alt="Logo" className={styles.logo} />
+                <div className={styles.title}>IDEAS STOCK</div>
+
                 <div className={styles.languageSelector}>
                     <img src={flag} alt="Current Language" />
                     <div className={styles.languageDropdown}>
@@ -36,7 +36,7 @@ const MenuBar = ({ userRole }) => {
                 <div className={styles.navLeft}>
                     <button onClick={() => navigate('/HomePage')}>{t('Department')}</button>
                     {(userRole === 'manager' || userRole === 'admin') && (
-                        <button onClick={() => navigate('/admin/ideas')}>{t('Manage Ideas')}</button>
+                        <button onClick={() => navigate('/admin/ideas-management')}>{t('Manage Ideas')}</button>
                     )}
                     {userRole === 'admin' && (
                         <button onClick={() => navigate('/admin/users')}>{t('Manage Users')}</button>

@@ -1,23 +1,23 @@
 .commentContainer {
-    margin-bottom: 16px;
-    padding: 16px;
+    margin-bottom: 2vh;
+    padding: 2vh;
     border: 1px solid #ccc;
-    border-radius: 16px;
+    border-radius: 1.5vh;
     background-color: #f9f9f9;
 }
 
 .indent0 {
-    margin-left: 0px;
+    margin-left: 0%;
 }
 
 .indent1 {
-    margin-left: 16px;
+    margin-left: 3%;
 }
 
 .indent2 {
-    margin-left: 32px;
+    margin-left: 6%;
 }
 
 .indent3 {
-    margin-left: 48px;
+    margin-left: 9%;
 }
