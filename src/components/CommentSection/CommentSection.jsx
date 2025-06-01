@@ -4,12 +4,14 @@ import { ExpandLess, ExpandMore, Send } from '@mui/icons-material';
 import Comment from './Comment';
 import styles from './CommentSection.module.css';
 import { getComments, postComment, likeComment, unlikeComment } from '../../api/IdeasApi/commentsApi';
+import { useTranslation } from 'react-i18next';
 
 const CommentSection = ({ itemId, itemType, userEmail }) => {
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
     const [replyTo, setReplyTo] = useState(null);
     const [showComments, setShowComments] = useState(false);
+    const { t } = useTranslation();
 
     const fetchComments = useCallback(async () => {
         try {
@@ -58,7 +60,7 @@ const CommentSection = ({ itemId, itemType, userEmail }) => {
                 startIcon={showComments ? <ExpandLess /> : <ExpandMore />}
                 onClick={() => setShowComments(!showComments)}
             >
-                {showComments ? 'Ukryj komentarze' : 'Pokaż komentarze'}
+                {showComments ? t('Hide comments') : t('Show comments')}
             </Button>
 
             <Collapse in={showComments}>
@@ -77,7 +79,7 @@ const CommentSection = ({ itemId, itemType, userEmail }) => {
                         <Paper className={styles.commentInputContainer}>
                             <TextField
                                 variant="standard"
-                                placeholder={replyTo ? 'Odpowiadasz na komentarz...' : 'Dodaj komentarz...'}
+                                placeholder={replyTo ? t('Replying to a comment') : t('Add a comment')}
                                 value={newComment}
                                 onChange={(e) => setNewComment(e.target.value)}
                                 multiline

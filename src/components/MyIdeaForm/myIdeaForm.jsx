@@ -1,10 +1,12 @@
 import React, { useRef, useState } from 'react';
 import styles from './myIdeaForm.module.css';
 import { Trash2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
-const MyIdeaForm = ({ t, handleSubmit, handleCancel, branchFromQuery }) => {
+const MyIdeaForm = ({ handleSubmit, handleCancel, branchFromQuery }) => {
     const [files, setFiles] = useState([]);
     const fileInputRef = useRef();
+    const { t } = useTranslation();
 
     const handleDrop = (e) => {
         e.preventDefault();

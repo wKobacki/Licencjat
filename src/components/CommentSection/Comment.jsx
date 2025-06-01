@@ -2,9 +2,11 @@ import React from 'react';
 import { Box, Typography, Button, Stack } from '@mui/material';
 import { Reply, ThumbUp } from '@mui/icons-material';
 import styles from './Comment.module.css';
+import { useTranslation } from 'react-i18next';
 
 const Comment = ({ comment, depth, setReplyTo, handleLike }) => {
     const indentClass = styles[`indent${depth}`] || styles.indent0;
+    const { t } = useTranslation();
 
     return (
         <Box className={`${styles.commentContainer} ${indentClass}`}>
@@ -21,14 +23,14 @@ const Comment = ({ comment, depth, setReplyTo, handleLike }) => {
 
             <Stack direction="row" spacing={1} mt={1}>
                 <Button size="small" startIcon={<Reply />} onClick={() => setReplyTo(comment.id)}>
-                    Odpowiedz
+                    {t('Reply')}
                 </Button>
                 <Button
                     size="small"
                     startIcon={<ThumbUp />}
                     onClick={() => handleLike(comment.id, comment.likedByCurrentUser)}
                 >
-                    {comment.likes ?? 0} polubień
+                    {comment.likes ?? 0} {t('Likes')}
                 </Button>
             </Stack>
 

@@ -7,8 +7,10 @@ import {
     updateUserBranch
 } from '../../api/UserApi/usersApi';
 import styles from './Users.module.css';
+import { useTranslation } from 'react-i18next';
 
 const Users = ({ userEmail }) => {
+    const { t } = useTranslation();
     const [users, setUsers] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
@@ -24,7 +26,7 @@ const Users = ({ userEmail }) => {
     }, []);
 
     const handleDelete = async (id) => {
-        if (window.confirm('Czy na pewno chcesz usunąć użytkownika?')) {
+        if (window.confirm(t('Are you sure you want to delete this user?'))) {
             await deleteUser(id, userEmail);
             loadUsers();
         }
@@ -32,13 +34,12 @@ const Users = ({ userEmail }) => {
 
     const handleRoleChange = async (id, newRole) => {
         try {
-            const response = await updateUserRole(id, newRole, userEmail);
+            await updateUserRole(id, newRole, userEmail);
             await loadUsers(); 
         } catch (err) {
-            console.error('Błąd przy zmianie roli:', err);
+            console.error(t('Error changing role:'), err);
         }
     };
-    
 
     const handleBlockToggle = async (id, isBlocked) => {
         await toggleUserBlock(id, isBlocked, userEmail);
@@ -63,7 +64,7 @@ const Users = ({ userEmail }) => {
 
             await loadUsers();
         } catch (err) {
-            console.error('Błąd przy zmianie oddziału:', err);
+            console.error(t('Error changing branch:'), err);
         }
     };
 
@@ -84,7 +85,7 @@ const Users = ({ userEmail }) => {
             <div className={styles.searchBarWrapper}>
                 <input
                     type="text"
-                    placeholder="Szukaj użytkownika..."
+                    placeholder={t('Search user...')}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className={styles.searchInput}
@@ -96,7 +97,7 @@ const Users = ({ userEmail }) => {
                     <li key={u.id} className={styles.userCard}>
                         <div className={styles.userDetails}>
                             <strong>{u.name} {u.surname}</strong> ({u.email})<br />
-                            <span>Oddział:</span> {u.branch} | <span>Zablokowany:</span> {u.isBlocked ? 'Tak' : 'Nie'}
+                            <span>{t('Branch')}:</span> {u.branch} | <span>{t('Blocked')}:</span> {u.isBlocked ? t('Yes') : t('No')}
                         </div>
                         <div className={styles.userActions}>
                             <select
@@ -104,9 +105,9 @@ const Users = ({ userEmail }) => {
                                 onChange={(e) => handleRoleChange(u.id, e.target.value)}
                                 className={styles.select}
                             >
-                                <option value="user">User</option>
-                                <option value="manager">Manager</option>
-                                <option value="admin">Admin</option>
+                                <option value="user">{t('User')}</option>
+                                <option value="manager">{t('Manager')}</option>
+                                <option value="admin">{t('Admin')}</option>
                             </select>
 
                             <select
@@ -114,18 +115,18 @@ const Users = ({ userEmail }) => {
                                 onChange={(e) => handleBranchChange(u.id, e.target.value)}
                                 className={styles.select}
                             >
-                                <option value="Warszawa">Warszawa</option>
-                                <option value="Łódź">Łódź</option>
-                                <option value="Kraków">Kraków</option>
-                                <option value="Gdańsk">Gdańsk</option>
+                                <option value="Warszawa">{t('Warsaw')}</option>
+                                <option value="Łódź">{t('Lodz')}</option>
+                                <option value="Kraków">{t('Krakow')}</option>
+                                <option value="Gdańsk">{t('Gdansk')}</option>
                             </select>
 
                             <button onClick={() => handleBlockToggle(u.id, u.isBlocked)} className={styles.actionButton}>
-                                {u.isBlocked ? 'Odblokuj' : 'Zablokuj'}
+                                {u.isBlocked ? t('Unblock') : t('Block')}
                             </button>
 
                             <button onClick={() => handleDelete(u.id)} className={styles.deleteButton}>
-                                Usuń
+                                {t('Delete')}
                             </button>
                         </div>
                     </li>

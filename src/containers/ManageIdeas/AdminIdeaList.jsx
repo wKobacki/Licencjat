@@ -2,15 +2,17 @@ import React, { useEffect, useState } from 'react';
 import AdminIdeaCard from './AdminIdeaCard';
 import styles from './AdminIdeaList.module.css';
 import { getAllIdeasAndProblems } from '../../api/AdminApi/adminApi';
+import { useTranslation } from 'react-i18next';
 
 const AdminIdeaList = () => {
+    const { t } = useTranslation();
+
     const [ideas, setIdeas] = useState([]);
     const [filterBranch, setFilterBranch] = useState('all');
     const [filterStatus, setFilterStatus] = useState('all');
     const [archived, setArchived] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
 
-    // Mapowanie nazw statusów frontendowych na backendowe
     const statusMap = {
         oczekujące: 'pending',
         głosowanie: 'in_voting',
@@ -19,7 +21,6 @@ const AdminIdeaList = () => {
         odrzucone: 'rejected'
     };
 
-    // Pobranie danych z backendu
     const fetchData = async () => {
         try {
             const response = await getAllIdeasAndProblems(archived);
@@ -27,7 +28,7 @@ const AdminIdeaList = () => {
                 setIdeas(response);
             }
         } catch (err) {
-            console.error('Błąd podczas pobierania pomysłów:', err);
+            console.error(t('Error while fetching ideas:'), err);
         }
     };
 
@@ -35,7 +36,6 @@ const AdminIdeaList = () => {
         fetchData();
     }, [archived]);
 
-    // Filtrowanie danych
     const filteredIdeas = ideas
         .filter((idea) => {
             if (filterBranch === 'all') return true;
@@ -55,13 +55,12 @@ const AdminIdeaList = () => {
             );
         });
 
-    // Eksport pomysłów do pliku tekstowego
     const handleExportAll = () => {
         const lines = filteredIdeas.map((idea) => {
             const title = idea.title || '';
             const description = idea.description || '';
-            const author = idea.author_email || 'Nieznany';
-            const branch = idea.branch || 'Nieznana';
+            const author = idea.author_email || t('Unknown');
+            const branch = idea.branch || t('Unknown');
             return `${title};${description};${author};${branch}`;
         });
 
@@ -69,7 +68,7 @@ const AdminIdeaList = () => {
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', `wszystkie_pomysly_export.txt`);
+        link.setAttribute('download', 'export_all_ideas.txt');
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -80,37 +79,37 @@ const AdminIdeaList = () => {
             <div className={styles.filterBar}>
                 <input
                     type="text"
-                    placeholder="Szukaj po tytule, opisie, autorze..."
+                    placeholder={t('Search by title, description, author...')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className={styles.searchInput}
                 />
 
                 <select onChange={(e) => setFilterBranch(e.target.value)} value={filterBranch}>
-                    <option value="all">Wszystkie giełdy</option>
-                    <option value="general">Giełda ogólna</option>
-                    <option value="Łódź">Łódź</option>
-                    <option value="Warszawa">Warszawa</option>
-                    <option value="Kraków">Kraków</option>
-                    <option value="Gdańsk">Gdańsk</option>
+                    <option value="all">{t('All departments')}</option>
+                    <option value="general">{t('General stock')}</option>
+                    <option value="Łódź">{t('Łódź')}</option>
+                    <option value="Warszawa">{t('Warszawa')}</option>
+                    <option value="Kraków">{t('Kraków')}</option>
+                    <option value="Gdańsk">{t('Gdańsk')}</option>
                 </select>
 
                 <select onChange={(e) => setFilterStatus(e.target.value)} value={filterStatus}>
-                    <option value="all">Wszystkie statusy</option>
-                    <option value="oczekujące">Oczekujące</option>
-                    <option value="głosowanie">W trakcie głosowania</option>
-                    <option value="realizacja">W trakcie realizacji</option>
-                    <option value="zakończone">Zakończone</option>
-                    <option value="odrzucone">Odrzucone</option>
+                    <option value="all">{t('All statuses')}</option>
+                    <option value="oczekujące">{t('Pending')}</option>
+                    <option value="głosowanie">{t('In voting')}</option>
+                    <option value="realizacja">{t('In progress')}</option>
+                    <option value="zakończone">{t('Completed')}</option>
+                    <option value="odrzucone">{t('Rejected')}</option>
                 </select>
 
                 <button onClick={() => setArchived(!archived)} className={styles.toggleButton}>
-                    {archived ? 'Pokaż niezarchiwizowane' : 'Pokaż zarchiwizowane'}
+                    {archived ? t('Show unarchived') : t('Show archived')}
                 </button>
 
                 {!archived && (
                     <button onClick={handleExportAll} className={styles.exportButton}>
-                        Eksportuj wszystkie
+                        {t('Export all')}
                     </button>
                 )}
             </div>

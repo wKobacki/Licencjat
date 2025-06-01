@@ -3,7 +3,6 @@ import styles from './AdminIdeaCard.module.css';
 import AdminCommentSection from '../../components/CommentSectionAdmin/AdminCommentSection';
 import Lightbox from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/styles.css';
-
 import {
     updateIdeaStatus,
     archiveIdea,
@@ -11,14 +10,16 @@ import {
     deleteIdea,
     deleteProblem
 } from '../../api/AdminApi/adminApi';
+import { useTranslation } from 'react-i18next';
 
 const AdminIdeaCard = ({ idea, onUpdate }) => {
+    const { t } = useTranslation();
     const [status, setStatus] = useState(idea?.status || '');
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [lightboxIndex, setLightboxIndex] = useState(0);
 
     if (!idea) {
-        return <div className={styles.error}>Błąd: pomysł nie został przekazany.</div>;
+        return <div className={styles.error}>{t('Error: idea not provided.')}</div>;
     }
 
     const handleStatusChange = async (e) => {
@@ -28,7 +29,7 @@ const AdminIdeaCard = ({ idea, onUpdate }) => {
             await updateIdeaStatus(idea.id, newStatus, idea.type);
             onUpdate?.();
         } catch (err) {
-            console.error('Błąd przy zmianie statusu:', err);
+            console.error(t('Error changing status:'), err);
         }
     };
 
@@ -42,7 +43,7 @@ const AdminIdeaCard = ({ idea, onUpdate }) => {
             }
             onUpdate?.();
         } catch (err) {
-            console.error('Błąd podczas zmiany archiwizacji:', err);
+            console.error(t('Error while archiving:'), err);
         }
     };
 
@@ -55,15 +56,15 @@ const AdminIdeaCard = ({ idea, onUpdate }) => {
             }
             onUpdate?.();
         } catch (err) {
-            console.error('Błąd podczas usuwania:', err);
+            console.error(t('Error while deleting:'), err);
         }
     };
 
     const handleExport = () => {
         const title = idea.title || '';
         const description = idea.description || '';
-        const author = idea.author_email || 'Nieznany';
-        const branch = idea.type === 'problem' ? idea.branch || 'Nieznana' : 'Giełda ogólna';
+        const author = idea.author_email || t('Unknown');
+        const branch = idea.type === 'problem' ? idea.branch || t('Unknown') : t('General stock');
         const txtContent = `${title};${description};${author};${branch}\n`;
 
         const blob = new Blob([txtContent], { type: 'text/plain;charset=utf-8;' });
@@ -91,8 +92,8 @@ const AdminIdeaCard = ({ idea, onUpdate }) => {
             <p>{idea.description}</p>
 
             <div className={styles.info}>
-                <p><strong>Autor:</strong> {idea.author_email || 'Nieznany'}</p>
-                <p><strong>Giełda:</strong> {idea.type === 'problem' ? idea.branch || 'Nieznana' : 'Giełda ogólna'}</p>
+                <p><strong>{t('Author')}:</strong> {idea.author_email || t('Unknown')}</p>
+                <p><strong>{t('Department')}:</strong> {idea.type === 'problem' ? idea.branch || t('Unknown') : t('General stock')}</p>
             </div>
 
             {images.length > 0 && (
@@ -120,23 +121,23 @@ const AdminIdeaCard = ({ idea, onUpdate }) => {
 
             <div className={styles.actions}>
                 <select value={status} onChange={handleStatusChange}>
-                    <option value="pending">Oczekujące</option>
-                    <option value="in_voting">W głosowaniu</option>
-                    <option value="in_progress">W realizacji</option>
-                    <option value="completed">Zakończone</option>
-                    <option value="rejected">Odrzucone</option>
+                    <option value="pending">{t('Pending')}</option>
+                    <option value="in_voting">{t('In voting')}</option>
+                    <option value="in_progress">{t('In progress')}</option>
+                    <option value="completed">{t('Completed')}</option>
+                    <option value="rejected">{t('Rejected')}</option>
                 </select>
 
                 <button onClick={handleArchive} className={styles.archiveButton}>
-                    {idea.archived ? 'Cofnij archiwizację' : 'Archiwizuj'}
+                    {idea.archived ? t('Unarchive') : t('Archive')}
                 </button>
 
                 <button onClick={handleDelete} className={styles.deleteButton}>
-                    Usuń
+                    {t('Delete')}
                 </button>
 
                 <button onClick={handleExport} className={styles.exportButton}>
-                    Eksportuj
+                    {t('Export')}
                 </button>
             </div>
 

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import styles from './AdminCommentSection.module.css';
 import { fetchAllComments, deleteComment } from '../../api/AdminApi/adminApi';
+import { useTranslation } from 'react-i18next';
 
 const AdminCommentSection = ({ ideaId, ideaType }) => {
     const [comments, setComments] = useState([]);
     const [expanded, setExpanded] = useState({});
+    const { t } = useTranslation();
 
     useEffect(() => {
         const loadComments = async () => {
@@ -40,24 +42,23 @@ const AdminCommentSection = ({ ideaId, ideaType }) => {
         return ids;
     };
 
-const handleDeleteComment = async (comment) => {
-    const toDelete = getAllNestedCommentIds(comment);
-    for (const id of toDelete) {
-        await deleteComment(id);
-    }
+    const handleDeleteComment = async (comment) => {
+        const toDelete = getAllNestedCommentIds(comment);
+        for (const id of toDelete) {
+            await deleteComment(id);
+        }
 
-    const removeFromTree = (list) => {
-        return list
-            .filter(c => !toDelete.includes(c.id))
-            .map(c => ({
-                ...c,
-                replies: c.replies ? removeFromTree(c.replies) : []
-            }));
+        const removeFromTree = (list) => {
+            return list
+                .filter(c => !toDelete.includes(c.id))
+                .map(c => ({
+                    ...c,
+                    replies: c.replies ? removeFromTree(c.replies) : []
+                }));
+        };
+
+        setComments(prev => removeFromTree(prev));
     };
-
-    setComments(prev => removeFromTree(prev));
-};
-
 
     const toggle = (id) => {
         setExpanded(prev => ({ ...prev, [id]: !prev[id] }));
@@ -73,11 +74,13 @@ const handleDeleteComment = async (comment) => {
                 <div className={styles.actions}>
                     {comment.replies?.length > 0 && (
                         <button onClick={() => toggle(comment.id)} className={styles.toggleButton}>
-                            {expanded[comment.id] ? 'Zwiń odpowiedzi' : `Pokaż odpowiedzi (${comment.replies.length})`}
+                            {expanded[comment.id]
+                                ? t('Collapse replies')
+                                : `${t('Show replies')} (${comment.replies.length})`}
                         </button>
                     )}
                     <button onClick={() => handleDeleteComment(comment)} className={styles.deleteButton}>
-                        Usuń
+                        {t('Delete')}
                     </button>
                 </div>
                 {expanded[comment.id] && comment.replies && renderComments(comment.replies, depth + 1)}
@@ -87,8 +90,8 @@ const handleDeleteComment = async (comment) => {
 
     return (
         <div className={styles.container}>
-            <h4>Komentarze:</h4>
-            {comments.length > 0 ? renderComments(comments) : <p>Brak komentarzy.</p>}
+            <h4>{t('Comments:')}</h4>
+            {comments.length > 0 ? renderComments(comments) : <p>{t('No comments')}</p>}
         </div>
     );
 };

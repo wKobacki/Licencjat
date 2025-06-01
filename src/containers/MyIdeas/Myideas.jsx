@@ -28,7 +28,7 @@ const MyIdeas = () => {
         const fetchData = async () => {
             setLoading(true);
             if (!userBranch || !userEmail) {
-                console.warn('Brak danych użytkownika w localStorage.');
+                console.warn(t('Missing user data.'));
                 setProblems([]);
                 setVotedProblems([]);
                 setLoading(false);
@@ -53,7 +53,7 @@ const MyIdeas = () => {
 
         fetchData();
         fetchBlockStatus();
-    }, [userBranch, userEmail]);
+    }, [userBranch, userEmail, t]);
 
     const handleVote = async (problemId) => {
         try {
@@ -73,10 +73,10 @@ const MyIdeas = () => {
                     )
                 );
             } else {
-                console.warn('Nieprawidłowa odpowiedź z backendu:', res);
+                console.warn(t('Invalid backend response'), res);
             }
         } catch (e) {
-            console.error('Błąd przy głosowaniu:', e);
+            console.error(t('Voting error'), e);
         }
     };
 
@@ -107,7 +107,7 @@ const MyIdeas = () => {
         });
 
         const result = await response.json();
-        console.log('Wysłano formularz:', result);
+        console.log(t('Form sent'), result);
         form.reset();
         setShowForm(false);
         window.location.reload();

@@ -31,7 +31,7 @@ const IdeasExchange = () => {
             setLoading(true);
 
             if (!userBranch || !userEmail) {
-                console.warn('Brak danych użytkownika w localStorage.');
+                console.warn('Missing user data in localStorage.');
                 setIdeas([]);
                 setLoading(false);
                 return;
@@ -46,7 +46,7 @@ const IdeasExchange = () => {
                     .map(idea => idea.id);
                 setVotedIdeas(voted);
             } catch (error) {
-                console.error('Błąd podczas pobierania pomysłów:', error);
+                console.error('Error fetching ideas:', error);
                 setIdeas([]);
             }
 
@@ -80,10 +80,10 @@ const IdeasExchange = () => {
                     )
                 );
             } else {
-                console.warn('Nieprawidłowa odpowiedź z backendu:', res);
+                console.warn('Invalid backend response:', res);
             }
         } catch (e) {
-            console.error('Błąd przy głosowaniu:', e);
+            console.error('Error voting:', e);
         }
     };
 
@@ -95,7 +95,7 @@ const IdeasExchange = () => {
         files.forEach(file => formData.append('images', file));
 
         const response = await submitIdea(formData, userEmail);
-        console.log('Wysłano formularz:', response);
+        console.log('Form submitted:', response);
         form.reset();
         setShowForm(false);
         window.location.reload();

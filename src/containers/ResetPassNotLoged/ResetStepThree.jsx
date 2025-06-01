@@ -3,12 +3,14 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { resetPassword } from '../../api/AuthApi/passwordResetApi';
 import styles from './ResetPassword.module.css';
 import { CheckCircle, Cancel } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 
 const ResetStepThree = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const email = location.state?.email;
-    const code = location.state?.code; 
+    const code = location.state?.code;
+    const { t } = useTranslation();
 
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -27,7 +29,7 @@ const ResetStepThree = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!Object.values(checks).every(Boolean)) {
-            setError('Hasło nie spełnia wymagań lub nie pasuje.');
+            setError(t('Password does not meet requirements or does not match.'));
             return;
         }
 
@@ -37,48 +39,47 @@ const ResetStepThree = () => {
                 setSuccess(true);
                 setTimeout(() => navigate('/'), 500);
             } else {
-                setError(res.message || 'Błąd podczas zmiany hasła');
+                setError(res.message || t('Error while resetting password.'));
             }
         } catch (err) {
             console.error(err);
-            setError('Błąd serwera.');
+            setError(t('Server error.'));
         }
     };
 
-    const renderIcon = (valid) => (
-        valid ? <CheckCircle className={styles.validIcon} /> : <Cancel className={styles.invalidIcon} />
-    );
+    const renderIcon = (valid) =>
+        valid ? <CheckCircle className={styles.validIcon} /> : <Cancel className={styles.invalidIcon} />;
 
     return (
         <div className={styles.container}>
             <form onSubmit={handleSubmit} className={styles.form}>
-                <h2>Ustaw nowe hasło</h2>
+                <h2>{t('Set new password')}</h2>
                 <input
                     type="password"
-                    placeholder="Nowe hasło"
+                    placeholder={t('New password')}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
                 <input
                     type="password"
-                    placeholder="Potwierdź hasło"
+                    placeholder={t('Confirm password')}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                 />
 
                 <ul className={styles.hintList}>
-                    <li>{renderIcon(checks.length)} Min. 8 znaków</li>
-                    <li>{renderIcon(checks.upper)} Jedna duża litera</li>
-                    <li>{renderIcon(checks.lower)} Jedna mała litera</li>
-                    <li>{renderIcon(checks.digit)} Cyfra</li>
-                    <li>{renderIcon(checks.special)} Znak specjalny</li>
-                    <li>{renderIcon(checks.match)} Hasła są identyczne</li>
+                    <li>{renderIcon(checks.length)} {t('Min. 8 characters')}</li>
+                    <li>{renderIcon(checks.upper)} {t('One uppercase letter')}</li>
+                    <li>{renderIcon(checks.lower)} {t('One lowercase letter')}</li>
+                    <li>{renderIcon(checks.digit)} {t('One digit')}</li>
+                    <li>{renderIcon(checks.special)} {t('One special character')}</li>
+                    <li>{renderIcon(checks.match)} {t('Passwords match')}</li>
                 </ul>
 
                 {error && <p className={styles.error}>{error}</p>}
-                {success && <p className={styles.success}>Hasło zmienione!</p>}
+                {success && <p className={styles.success}>{t('Password successfully changed!')}</p>}
 
-                <button type="submit">Zmień hasło</button>
+                <button type="submit">{t('Change password')}</button>
             </form>
         </div>
     );
