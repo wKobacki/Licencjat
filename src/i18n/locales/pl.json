@@ -45,7 +45,8 @@
     "Password changed successfully.": "Hasło zostało zmienione.",
     "Error changing password.": "Błąd przy zmianie hasła.",
     "An error occurred while changing the password.": "Wystąpił błąd podczas zmiany hasła.",
-    "Submit": "Zmień hasło",
+    "Submit": "Wyślij",
+    "Change": "Zmień",
     "General stock": "Ogólna giełda",
     "Add new idea": "Dodaj nowy pomysł",
     "You are blocked and cannot submit new ideas.": "Jesteś zablokowany i nie możesz zgłaszać nowych pomysłów.",
@@ -79,6 +80,7 @@
     "Error: idea not provided.": "Błąd: pomysł nie został przekazany.",
     "Search by title, description, author...": "Szukaj po tytule, opisie, autorze...",
     "All departments": "Wszystkie giełdy",
+    "Departments": "Giełdy",
     "All statuses": "Wszystkie statusy",
     "Show archived": "Pokaż zarchiwizowane",
     "Show unarchived": "Pokaż niezarchiwizowane",
@@ -128,5 +130,8 @@
     "Invalid code or missing email.": "Wprowadź kod i upewnij się, że e-mail został przekazany.",
     "Invalid verification code.": "Nieprawidłowy kod weryfikacyjny.",
     "Verification error.": "Wystąpił błąd podczas weryfikacji.",
-    "Account verified!": "Konto zostało zweryfikowane!"
+    "Account verified!": "Konto zostało zweryfikowane!",
+    "Previous": "Poprzedni",
+    "Page": "Strona",
+    "Next": "Nastepny"
 }

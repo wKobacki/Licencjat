@@ -18,6 +18,11 @@ const IdeasExchange = () => {
     const userBranch = localStorage.getItem('userBranch');
 
     const [ideas, setIdeas] = useState([]);
+    const [paginatedIdeas, setPaginatedIdeas] = useState([]);
+    const [totalPages, setTotalPages] = useState(1);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5;
+
     const [loading, setLoading] = useState(true);
     const [votedIdeas, setVotedIdeas] = useState([]);
     const [showForm, setShowForm] = useState(false);
@@ -61,6 +66,14 @@ const IdeasExchange = () => {
         fetchData();
         fetchBlockStatus();
     }, [userBranch, userEmail]);
+
+    useEffect(() => {
+        const start = (currentPage - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        setPaginatedIdeas(ideas.slice(start, end));
+        setTotalPages(Math.ceil(ideas.length / itemsPerPage));
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, [ideas, currentPage]);
 
     const handleVote = async (ideaId) => {
         try {
@@ -117,6 +130,11 @@ const IdeasExchange = () => {
         setLightboxOpen(true);
     };
 
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
     return (
         <div className={styles.container}>
             {!isBlocked ? (
@@ -143,50 +161,111 @@ const IdeasExchange = () => {
             {loading ? (
                 <p>{t('Loading...')}</p>
             ) : (
-                <div className={styles.problemList}>
-                    {ideas.map(idea => (
-                        <div key={idea.id} className={styles.problemCard}>
-                            <span className={`${styles.statusTag} ${getStatusClass(idea.status)}`}>
-                                {t(idea.status.replace('_', ' '))}
-                            </span>
-                            <h3>{idea.title}</h3>
-                            <p>{idea.description}</p>
-                            <p>{idea.solution}</p>
+                <>
+                    <div className={styles.problemList}>
+                        {paginatedIdeas.map(idea => (
+                            <div key={idea.id} className={styles.problemCard}>
+                                <span className={`${styles.statusTag} ${getStatusClass(idea.status)}`}>
+                                    {t(idea.status.replace('_', ' '))}
+                                </span>
+                                <h3>{idea.title}</h3>
+                                <p>{idea.description}</p>
+                                <p>{idea.solution}</p>
 
-                            {idea.images?.length > 0 && (
-                                <div className={styles.imageGallery}>
-                                    {idea.images.map((img, idx) => (
-                                        <img
-                                            key={idx}
-                                            src={`http://localhost:5000${img}`}
-                                            alt={`idea-${idx}`}
-                                            className={styles.thumbnail}
-                                            onClick={() => openLightbox(idea.images, idx)}
-                                        />
-                                    ))}
+                                {idea.images?.length > 0 && (
+                                    <div className={styles.imageGallery}>
+                                        {idea.images.map((img, idx) => (
+                                            <img
+                                                key={idx}
+                                                src={`http://localhost:5000${img}`}
+                                                alt={`idea-${idx}`}
+                                                className={styles.thumbnail}
+                                                onClick={() => openLightbox(idea.images, idx)}
+                                            />
+                                        ))}
+                                    </div>
+                                )}
+
+                                <div className={styles.voteButtonContainer}>
+                                    <button
+                                        className={`${styles.voteButton} ${votedIdeas.includes(idea.id) ? styles.voted : ''}`}
+                                        onClick={() => handleVote(idea.id)}
+                                    >
+                                        {votedIdeas.includes(idea.id) ? t('Unvote') : t('Vote')}
+                                    </button>
+                                    <span className={styles.voteCount}>
+                                        {t('Votes')}: {idea.votes}
+                                    </span>
                                 </div>
+
+                                <CommentSection
+                                    itemId={idea.id}
+                                    itemType="idea"
+                                    userEmail={userEmail}
+                                />
+                            </div>
+                        ))}
+                    </div>
+
+                    {totalPages > 1 && (
+                        <div className={styles.pagination}>
+                            <button
+                                onClick={() => handlePageChange(currentPage - 1)}
+                                disabled={currentPage === 1}
+                                className={`${styles.pageButton} ${currentPage === 1 ? styles.disabled : ''}`}
+                            >
+                                ‹
+                            </button>
+
+                            {currentPage > 2 && (
+                                <button
+                                    onClick={() => handlePageChange(1)}
+                                    className={`${styles.pageButton} ${currentPage === 1 ? styles.activePage : ''}`}
+                                >
+                                    1
+                                </button>
                             )}
 
-                            <div className={styles.voteButtonContainer}>
-                                <button
-                                    className={`${styles.voteButton} ${votedIdeas.includes(idea.id) ? styles.voted : ''}`}
-                                    onClick={() => handleVote(idea.id)}
-                                >
-                                    {votedIdeas.includes(idea.id) ? t('Unvote') : t('Vote')}
-                                </button>
-                                <span className={styles.voteCount}>
-                                    {t('Votes')}: {idea.votes}
-                                </span>
-                            </div>
+                            {currentPage > 3 && <span className={styles.pageDots}>...</span>}
 
-                            <CommentSection
-                                itemId={idea.id}
-                                itemType="idea"
-                                userEmail={userEmail}
-                            />
+                            {Array.from({ length: totalPages }, (_, i) => i + 1)
+                                .filter(
+                                    (page) =>
+                                        page === currentPage ||
+                                        page === currentPage - 1 ||
+                                        page === currentPage + 1
+                                )
+                                .map((page) => (
+                                    <button
+                                        key={page}
+                                        onClick={() => handlePageChange(page)}
+                                        className={`${styles.pageButton} ${currentPage === page ? styles.activePage : ''}`}
+                                    >
+                                        {page}
+                                    </button>
+                                ))}
+
+                            {currentPage < totalPages - 2 && <span className={styles.pageDots}>...</span>}
+
+                            {currentPage < totalPages - 1 && (
+                                <button
+                                    onClick={() => handlePageChange(totalPages)}
+                                    className={`${styles.pageButton} ${currentPage === totalPages ? styles.activePage : ''}`}
+                                >
+                                    {totalPages}
+                                </button>
+                            )}
+
+                            <button
+                                onClick={() => handlePageChange(currentPage + 1)}
+                                disabled={currentPage === totalPages}
+                                className={`${styles.pageButton} ${currentPage === totalPages ? styles.disabled : ''}`}
+                            >
+                                ›
+                            </button>
                         </div>
-                    ))}
-                </div>
+                    )}
+                </>
             )}
 
             {lightboxOpen && (

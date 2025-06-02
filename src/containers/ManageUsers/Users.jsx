@@ -79,6 +79,11 @@ const Users = ({ userEmail }) => {
 
     const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
 
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
     return (
         <div className={styles.container}>
 
@@ -133,17 +138,64 @@ const Users = ({ userEmail }) => {
                 ))}
             </ul>
 
-            <div className={styles.pagination}>
-                {Array.from({ length: totalPages }, (_, i) => (
+            {totalPages > 1 && (
+                <div className={styles.pagination}>
                     <button
-                        key={i + 1}
-                        onClick={() => setCurrentPage(i + 1)}
-                        className={`${styles.pageButton} ${currentPage === i + 1 ? styles.activePage : ''}`}
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className={`${styles.pageButton} ${currentPage === 1 ? styles.disabled : ''}`}
                     >
-                        {i + 1}
+                        ‹
                     </button>
-                ))}
-            </div>
+
+                    {currentPage > 2 && (
+                        <button
+                            onClick={() => handlePageChange(1)}
+                            className={`${styles.pageButton} ${currentPage === 1 ? styles.activePage : ''}`}
+                        >
+                            1
+                        </button>
+                    )}
+
+                    {currentPage > 3 && <span className={styles.pageDots}>...</span>}
+
+                    {Array.from({ length: totalPages }, (_, i) => i + 1)
+                        .filter(
+                            (page) =>
+                                page === currentPage ||
+                                page === currentPage - 1 ||
+                                page === currentPage + 1
+                        )
+                        .map((page) => (
+                            <button
+                                key={page}
+                                onClick={() => handlePageChange(page)}
+                                className={`${styles.pageButton} ${currentPage === page ? styles.activePage : ''}`}
+                            >
+                                {page}
+                            </button>
+                        ))}
+
+                    {currentPage < totalPages - 2 && <span className={styles.pageDots}>...</span>}
+
+                    {currentPage < totalPages - 1 && (
+                        <button
+                            onClick={() => handlePageChange(totalPages)}
+                            className={`${styles.pageButton} ${currentPage === totalPages ? styles.activePage : ''}`}
+                        >
+                            {totalPages}
+                        </button>
+                    )}
+
+                    <button
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        className={`${styles.pageButton} ${currentPage === totalPages ? styles.disabled : ''}`}
+                    >
+                        ›
+                    </button>
+                </div>
+            )}
         </div>
     );
 };

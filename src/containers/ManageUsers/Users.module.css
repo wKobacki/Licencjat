@@ -2,7 +2,7 @@
     padding: 2%;
     background-color: #f5f6f8;
     min-height: 100vh;
-    margin-top: 6rem; 
+    margin-top: 6rem;
 }
 
 .title {
@@ -109,25 +109,39 @@
     background-color: #c0392b;
 }
 
+/* PAGINATION */
 .pagination {
     display: flex;
     justify-content: center;
-    gap: 0.5rem;
+    align-items: center;
     margin-top: 3%;
+    gap: 0.5rem;
+    flex-wrap: wrap;
 }
 
 .pageButton {
-    padding: 0.5rem 0.9rem;
-    border-radius: 8px;
-    background-color: #eee;
+    background-color: #ddd;
+    color: #333;
     border: none;
+    padding: 0.5em 1em;
+    border-radius: 0.4em;
+    font-weight: 600;
     cursor: pointer;
-    font-weight: bold;
-    transition: background 0.2s;
+    font-size: 0.95rem;
+    transition: background-color 0.3s;
+    min-width: 2.5em;
+    text-align: center;
 }
 
 .pageButton:hover {
     background-color: #ccc;
+}
+
+.pageButton:disabled,
+.pageButton.disabled {
+    background-color: #f0f0f0;
+    color: #999;
+    cursor: not-allowed;
 }
 
 .activePage {
@@ -135,7 +149,13 @@
     color: white;
 }
 
-/* RESPONSYWNOŚĆ */
+.pageDots {
+    font-size: 1rem;
+    color: #888;
+    padding: 0 0.4em;
+    user-select: none;
+}
+
 @media (max-width: 768px) {
     .searchBarWrapper {
         flex-direction: column;
@@ -155,5 +175,24 @@
     .deleteButton,
     .select {
         width: 100%;
+    }
+
+    .pagination {
+        flex-direction: column;
+        gap: 0.8em;
+        text-align: center;
+    }
+
+    .pageButton {
+        background-color: #007acc;
+        color: white;
+    }
+
+    .activePage {
+        background-color: #005b9a !important;
+    }
+
+    .pageDots {
+        padding: 0.2em 0.6em;
     }
 }

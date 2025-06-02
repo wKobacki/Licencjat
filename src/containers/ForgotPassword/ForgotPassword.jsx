@@ -103,7 +103,7 @@ const ForgotPassword = () => {
 
                 {error && <p className={styles.error}>{error}</p>}
                 {success && <p className={styles.success}>{success}</p>}
-                <button type="submit" className={styles.submitButton}>{t('Submit')}</button>
+                <button type="submit" className={styles.submitButton}>{t('Change')}</button>
             </form>
         </div>
     );

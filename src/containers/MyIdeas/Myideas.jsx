@@ -16,6 +16,8 @@ const MyIdeas = () => {
     const userBranch = localStorage.getItem('userBranch');
 
     const [problems, setProblems] = useState([]);
+    const [paginatedProblems, setPaginatedProblems] = useState([]);
+    const [totalPages, setTotalPages] = useState(1);
     const [loading, setLoading] = useState(true);
     const [votedProblems, setVotedProblems] = useState([]);
     const [showForm, setShowForm] = useState(false);
@@ -23,6 +25,9 @@ const MyIdeas = () => {
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [lightboxSlides, setLightboxSlides] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5;
 
     useEffect(() => {
         const fetchData = async () => {
@@ -39,10 +44,8 @@ const MyIdeas = () => {
             const fetchedProblems = Array.isArray(problemsData.problems) ? problemsData.problems : [];
 
             setProblems(fetchedProblems);
-
             const voted = fetchedProblems.filter(p => p.hasVoted).map(p => p.id);
             setVotedProblems(voted);
-
             setLoading(false);
         };
 
@@ -54,6 +57,14 @@ const MyIdeas = () => {
         fetchData();
         fetchBlockStatus();
     }, [userBranch, userEmail, t]);
+
+    useEffect(() => {
+        const start = (currentPage - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        setPaginatedProblems(problems.slice(start, end));
+        setTotalPages(Math.ceil(problems.length / itemsPerPage));
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, [problems, currentPage]);
 
     const handleVote = async (problemId) => {
         try {
@@ -120,6 +131,11 @@ const MyIdeas = () => {
         setLightboxOpen(true);
     };
 
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
     return (
         <div className={styles.container}>
             {!isBlocked ? (
@@ -146,49 +162,110 @@ const MyIdeas = () => {
             {loading ? (
                 <p>{t('Loading...')}</p>
             ) : (
-                <div className={styles.problemList}>
-                    {problems.map(problem => (
-                        <div key={problem.id} className={styles.problemCard}>
-                            <span className={`${styles.statusTag} ${getStatusClass(problem.status)}`}>
-                                {t(problem.status.replace('_', ' '))}
-                            </span>
-                            <h3>{problem.title}</h3>
-                            <p>{problem.description}</p>
-                            <p>{problem.solution}</p>
+                <div>
+                    <div className={styles.problemList}>
+                        {paginatedProblems.map(problem => (
+                            <div key={problem.id} className={styles.problemCard}>
+                                <span className={`${styles.statusTag} ${getStatusClass(problem.status)}`}>
+                                    {t(problem.status.replace('_', ' '))}
+                                </span>
+                                <h3>{problem.title}</h3>
+                                <p>{problem.description}</p>
+                                <p>{problem.solution}</p>
 
-                            {problem.images?.length > 0 && (
-                                <div className={styles.imageGallery}>
-                                    {problem.images.map((img, idx) => (
-                                        <img
-                                            key={idx}
-                                            src={`http://localhost:5000${img}`}
-                                            alt={`problem-${idx}`}
-                                            className={styles.thumbnail}
-                                            onClick={() => openLightbox(problem.images, idx)}
-                                        />
-                                    ))}
+                                {problem.images?.length > 0 && (
+                                    <div className={styles.imageGallery}>
+                                        {problem.images.map((img, idx) => (
+                                            <img
+                                                key={idx}
+                                                src={`http://localhost:5000${img}`}
+                                                alt={`problem-${idx}`}
+                                                className={styles.thumbnail}
+                                                onClick={() => openLightbox(problem.images, idx)}
+                                            />
+                                        ))}
+                                    </div>
+                                )}
+
+                                <div className={styles.voteButtonContainer}>
+                                    <button
+                                        className={`${styles.voteButton} ${votedProblems.includes(problem.id) ? styles.voted : ''}`}
+                                        onClick={() => handleVote(problem.id)}
+                                    >
+                                        {votedProblems.includes(problem.id) ? t('Unvote') : t('Vote')}
+                                    </button>
+                                    <span className={styles.voteCount}>
+                                        {t('Votes')}: {problem.votes}
+                                    </span>
                                 </div>
+
+                                <CommentSection
+                                    itemId={problem.id}
+                                    itemType="problem"
+                                    userEmail={userEmail}
+                                />
+                            </div>
+                        ))}
+                    </div>
+
+                    {totalPages > 1 && (
+                        <div className={styles.pagination}>
+                            <button
+                                onClick={() => handlePageChange(currentPage - 1)}
+                                disabled={currentPage === 1}
+                                className={`${styles.pageButton} ${currentPage === 1 ? styles.disabled : ''}`}
+                            >
+                                ‹
+                            </button>
+
+                            {currentPage > 2 && (
+                                <button
+                                    onClick={() => handlePageChange(1)}
+                                    className={`${styles.pageButton} ${currentPage === 1 ? styles.activePage : ''}`}
+                                >
+                                    1
+                                </button>
                             )}
 
-                            <div className={styles.voteButtonContainer}>
-                                <button
-                                    className={`${styles.voteButton} ${votedProblems.includes(problem.id) ? styles.voted : ''}`}
-                                    onClick={() => handleVote(problem.id)}
-                                >
-                                    {votedProblems.includes(problem.id) ? t('Unvote') : t('Vote')}
-                                </button>
-                                <span className={styles.voteCount}>
-                                    {t('Votes')}: {problem.votes}
-                                </span>
-                            </div>
+                            {currentPage > 3 && <span className={styles.pageDots}>...</span>}
 
-                            <CommentSection
-                                itemId={problem.id}
-                                itemType="problem"
-                                userEmail={userEmail}
-                            />
+                            {Array.from({ length: totalPages }, (_, i) => i + 1)
+                                .filter(
+                                    (page) =>
+                                        page === currentPage ||
+                                        page === currentPage - 1 ||
+                                        page === currentPage + 1
+                                )
+                                .map((page) => (
+                                    <button
+                                        key={page}
+                                        onClick={() => handlePageChange(page)}
+                                        className={`${styles.pageButton} ${currentPage === page ? styles.activePage : ''}`}
+                                    >
+                                        {page}
+                                    </button>
+                                ))}
+
+                            {currentPage < totalPages - 2 && <span className={styles.pageDots}>...</span>}
+
+                            {currentPage < totalPages - 1 && (
+                                <button
+                                    onClick={() => handlePageChange(totalPages)}
+                                    className={`${styles.pageButton} ${currentPage === totalPages ? styles.activePage : ''}`}
+                                >
+                                    {totalPages}
+                                </button>
+                            )}
+
+                            <button
+                                onClick={() => handlePageChange(currentPage + 1)}
+                                disabled={currentPage === totalPages}
+                                className={`${styles.pageButton} ${currentPage === totalPages ? styles.disabled : ''}`}
+                            >
+                                ›
+                            </button>
                         </div>
-                    ))}
+                    )}
                 </div>
             )}
 

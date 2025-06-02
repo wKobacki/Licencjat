@@ -46,6 +46,7 @@
     "Error changing password.": "Error changing password.",
     "An error occurred while changing the password.": "An error occurred while changing the password.",
     "Submit": "Submit",
+    "Change": "Change",
     "General stock": "General Stock",
     "Add new idea": "Add New Idea",
     "You are blocked and cannot submit new ideas.": "You are blocked and cannot submit new ideas.",
@@ -80,6 +81,7 @@
     "Search by title, description, author...": "Search by title, description, author...",
     "All departments": "All Departments",
     "All statuses": "All Statuses",
+    "Departments": "Departments",
     "Show archived": "Show Archived",
     "Show unarchived": "Show Unarchived",
     "Export all": "Export All",
@@ -128,5 +130,8 @@
     "Invalid code or missing email.": "Invalid code or missing email.",
     "Invalid verification code.": "Invalid verification code.",
     "Verification error.": "Verification error.",
-    "Account verified!": "Account verified!"
+    "Account verified!": "Account verified!",
+    "Previous": "Previous",
+    "Page": "Page",
+    "Next": "Next"
 }

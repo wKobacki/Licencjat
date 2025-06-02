@@ -1,7 +1,10 @@
 .container {
     padding: 1.5% 2%;
+    padding-bottom: 100px;
     background-color: #f5f6f8;
     margin-top: 5em;
+    min-height: 100vh;
+    box-sizing: border-box;
 }
 
 h3 {
@@ -33,6 +36,7 @@ h3 {
 .problemList {
     display: grid;
     gap: 1em;
+    margin-bottom: 2em;
 }
 
 .problemCard {
@@ -90,6 +94,7 @@ h3 {
     justify-content: space-between;
     align-items: center;
     margin-top: 0.75em;
+    gap: 1em;
 }
 
 .voteButton {
@@ -123,4 +128,108 @@ h3 {
     border-radius: 0.5em;
     text-align: center;
     margin-bottom: 0.75em;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2em;
+    gap: 0.5em;
+    flex-wrap: wrap;
+}
+
+.pageButton {
+    background-color: #007acc;
+    color: white;
+    border: none;
+    padding: 0.5em 1em;
+    border-radius: 0.4em;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background-color 0.3s;
+    min-width: 2.5em;
+    text-align: center;
+}
+
+.pageButton:hover {
+    background-color: #005b9a;
+}
+
+.pageButton:disabled,
+.pageButton.disabled {
+    background-color: #f0f0f0;
+    color: #999;
+    cursor: not-allowed;
+}
+
+.pageInfo {
+    font-weight: bold;
+    font-size: 0.95rem;
+}
+
+.pageDots {
+    font-size: 1rem;
+    color: #888;
+    padding: 0 0.4em;
+    user-select: none;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 4% 3%;
+        padding-bottom: 120px;
+    }
+
+    .addButton {
+        width: 100%;
+        font-size: 1.1rem;
+        padding: 0.6em 1em;
+    }
+
+    .problemList {
+        gap: 1.25em;
+    }
+
+    .problemCard {
+        padding: 1em;
+    }
+
+    .voteButtonContainer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .voteButton,
+    .voteCount {
+        width: 100%;
+        text-align: center;
+    }
+
+    .thumbnail {
+        width: 4.5em;
+        height: 4.5em;
+    }
+
+    .pagination {
+        flex-direction: column;
+        gap: 0.8em;
+        text-align: center;
+    }
+
+    .pageButton {
+        width: 100%;
+        font-size: 1rem;
+    }
+
+    .pageInfo {
+        font-size: 1rem;
+    }
+
+    .statusTag {
+        font-size: 0.7em;
+        top: 0.4em;
+        right: 0.4em;
+    }
 }

@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import styles from './MenuBar.module.css';
 import polandFlag from '../../assets/images/Poland.png';
 import ukFlag from '../../assets/images/UK.png';
-import ukraineFlag from '../../assets/images/UKR.jpg';
 import { LanguageContext } from '../../i18n/contexts/LanguageContext';
 
 const MenuBar = ({ userRole }) => {
@@ -22,28 +21,33 @@ const MenuBar = ({ userRole }) => {
             <header className={styles.header}>
                 <div className={styles.title}>IDEAS STOCK</div>
 
-                <div className={styles.languageSelector}>
+                <div className={styles.languageContainer}>
                     <img src={flag} alt="Current Language" />
                     <div className={styles.languageDropdown}>
                         <img src={polandFlag} alt="PL" onClick={() => changeLanguage('pl')} />
                         <img src={ukFlag} alt="EN" onClick={() => changeLanguage('en')} />
-                        <img src={ukraineFlag} alt="UA" onClick={() => changeLanguage('ua')} />
                     </div>
                 </div>
             </header>
 
             <nav className={styles.nav}>
                 <div className={styles.navLeft}>
-                    <button onClick={() => navigate('/HomePage')}>{t('Department')}</button>
+                    <button onClick={() => navigate('/HomePage')}>{t('Departments')}</button>
                     {(userRole === 'manager' || userRole === 'admin') && (
-                        <button onClick={() => navigate('/admin/ideas-management')}>{t('Manage Ideas')}</button>
+                        <button onClick={() => navigate('/admin/ideas-management')}>
+                            {t('Manage Ideas')}
+                        </button>
                     )}
                     {userRole === 'admin' && (
-                        <button onClick={() => navigate('/admin/users')}>{t('Manage Users')}</button>
+                        <button onClick={() => navigate('/admin/users')}>
+                            {t('Manage Users')}
+                        </button>
                     )}
                 </div>
                 <div className={styles.navRight}>
-                    <button onClick={() => navigate('/ForgotPassword')}>{t('Change password')}</button>
+                    <button onClick={() => navigate('/ForgotPassword')}>
+                        {t('Change password')}
+                    </button>
                     <button onClick={handleLogout}>{t('Logout')}</button>
                 </div>
             </nav>

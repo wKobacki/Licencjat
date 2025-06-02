@@ -94,6 +94,48 @@ h2 {
     background-color: #5a6268;
 }
 
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 3em;
+    gap: 1.5em;
+    flex-wrap: wrap;
+}
+
+.pageButton {
+    background-color: #ddd;
+    color: #333;
+    border: none;
+    padding: 0.5em 1em;
+    border-radius: 0.4em;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background-color 0.3s;
+}
+
+.pageButton:hover {
+    background-color: #ccc;
+}
+
+.pageButton:disabled {
+    background-color: #f0f0f0;
+    color: #999;
+    cursor: not-allowed;
+}
+
+.pageDots {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #666;
+}
+
+.activePage {
+    background-color: #007acc;
+    color: white;
+}
+
 @media (max-width: 768px) {
     .filterBar {
         flex-direction: column;
@@ -112,6 +154,10 @@ h2 {
     .exportButton {
         width: 100%;
         text-align: center;
+    }
+
+    .pagination {
+        gap: 0.8em;
     }
 
     h2 {

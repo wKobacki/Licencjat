@@ -1,25 +1,32 @@
 .container {
-    padding: 3% 2.5%;
-    padding-top: calc(60px + 5vh); /* menu bar wysokość + przestrzeń */
+    padding: 1.5% 2%;
+    padding-bottom: 100px;
     background-color: #f5f6f8;
+    margin-top: 5em;
+    min-height: 100vh;
+    box-sizing: border-box;
 }
 
 h3 {
     margin-top: 0;
-    font-size: 1.3rem;
+}
+
+.centerButton {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0.75em;
 }
 
 .addButton {
     background-color: #007acc;
     color: white;
-    padding: 0.6em 1em;
+    padding: 0.45em 0.8em;
     border: none;
-    border-radius: 0.6em;
+    border-radius: 0.375em;
     cursor: pointer;
-    margin-bottom: 2%;
     font-weight: bold;
     transition: background 0.3s;
-    font-size: 1rem;
+    font-size: 1em;
 }
 
 .addButton:hover {
@@ -28,27 +35,28 @@ h3 {
 
 .problemList {
     display: grid;
-    gap: 2.5%;
+    gap: 1em;
+    margin-bottom: 2em;
 }
 
 .problemCard {
     background: white;
-    border-radius: 1em;
-    padding: 2%;
-    box-shadow: 0 0.2em 0.6em rgba(0, 0, 0, 0.08);
+    border-radius: 0.75em;
+    padding: 0.75em 1em;
+    box-shadow: 0 0.15em 0.3em rgba(0, 0, 0, 0.08);
     position: relative;
 }
 
 .statusTag {
     font-weight: bold;
     color: white;
-    padding: 0.3em 1em;
-    border-radius: 2em;
-    font-size: 0.8em;
+    padding: 0.15em 0.5em;
+    border-radius: 1.25em;
+    font-size: 0.75em;
     text-transform: uppercase;
     position: absolute;
-    top: 1em;
-    right: 1em;
+    top: 0.6em;
+    right: 0.6em;
 }
 
 .status-in_progress {
@@ -68,35 +76,36 @@ h3 {
 }
 
 .imageGallery {
-    margin: 1em 0;
+    margin: 0.4em 0;
     display: flex;
-    gap: 1em;
+    gap: 0.4em;
     flex-wrap: wrap;
 }
 
 .thumbnail {
-    width: 6.5rem;
-    height: 6.5rem;
+    width: 5em;
+    height: 5em;
     object-fit: cover;
-    border-radius: 0.5em;
+    border-radius: 0.375em;
 }
 
 .voteButtonContainer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 1.5em;
+    margin-top: 0.75em;
+    gap: 1em;
 }
 
 .voteButton {
     background-color: #007acc;
     color: white;
     border: none;
-    padding: 0.6em 1.2em;
-    border-radius: 0.4em;
+    padding: 0.4em 0.9em;
+    border-radius: 0.3125em;
     font-weight: 600;
     cursor: pointer;
-    font-size: 0.95rem;
+    font-size: 1em;
 }
 
 .voteButton:hover {
@@ -109,48 +118,87 @@ h3 {
 
 .voteCount {
     font-weight: bold;
-    font-size: 0.95em;
-}
-
-.centerButton {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 2em;
+    font-size: 0.9em;
 }
 
 .blockedMessage {
     color: #c0392b;
     background-color: #f9d6d5;
-    padding: 1em;
-    border-radius: 0.6em;
+    padding: 0.5em;
+    border-radius: 0.5em;
     text-align: center;
-    margin-bottom: 2em;
+    margin-bottom: 0.75em;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2em;
+    gap: 0.5em;
+    flex-wrap: wrap;
+}
+
+.pageButton {
+    background-color: #007acc;
+    color: white;
+    border: none;
+    padding: 0.5em 1em;
+    border-radius: 0.4em;
+    font-weight: 600;
+    cursor: pointer;
     font-size: 0.95rem;
+    transition: background-color 0.3s;
+    min-width: 2.5em;
+    text-align: center;
+}
+
+.pageButton:hover {
+    background-color: #005b9a;
+}
+
+.pageButton:disabled,
+.pageButton.disabled {
+    background-color: #f0f0f0;
+    color: #999;
+    cursor: not-allowed;
+}
+
+.pageInfo {
+    font-weight: bold;
+    font-size: 0.95rem;
+}
+
+.pageDots {
+    font-size: 1rem;
+    color: #888;
+    padding: 0 0.4em;
+    user-select: none;
 }
 
 @media (max-width: 768px) {
     .container {
         padding: 4% 3%;
-        padding-top: calc(60px + 6vh);
+        padding-bottom: 120px;
+    }
+
+    .addButton {
+        width: 100%;
+        font-size: 1.1rem;
+        padding: 0.6em 1em;
     }
 
     .problemList {
-        gap: 1.5em;
+        gap: 1.25em;
     }
 
     .problemCard {
-        padding: 5%;
-    }
-
-    .thumbnail {
-        width: 5rem;
-        height: 5rem;
+        padding: 1em;
     }
 
     .voteButtonContainer {
         flex-direction: column;
         align-items: stretch;
-        gap: 1em;
     }
 
     .voteButton,
@@ -159,14 +207,29 @@ h3 {
         text-align: center;
     }
 
-    .addButton {
+    .thumbnail {
+        width: 4.5em;
+        height: 4.5em;
+    }
+
+    .pagination {
+        flex-direction: column;
+        gap: 0.8em;
+        text-align: center;
+    }
+
+    .pageButton {
         width: 100%;
-        font-size: 1.1rem;
+        font-size: 1rem;
+    }
+
+    .pageInfo {
+        font-size: 1rem;
     }
 
     .statusTag {
-        font-size: 0.75em;
-        top: 0.6em;
-        right: 0.6em;
+        font-size: 0.7em;
+        top: 0.4em;
+        right: 0.4em;
     }
 }

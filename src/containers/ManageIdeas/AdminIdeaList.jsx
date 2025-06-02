@@ -12,6 +12,8 @@ const AdminIdeaList = () => {
     const [filterStatus, setFilterStatus] = useState('all');
     const [archived, setArchived] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
 
     const statusMap = {
         oczekujące: 'pending',
@@ -54,6 +56,9 @@ const AdminIdeaList = () => {
                 (idea.author && idea.author.toLowerCase().includes(query))
             );
         });
+
+    const totalPages = Math.ceil(filteredIdeas.length / itemsPerPage);
+    const paginatedIdeas = filteredIdeas.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
     const handleExportAll = () => {
         const lines = filteredIdeas.map((idea) => {
@@ -115,7 +120,7 @@ const AdminIdeaList = () => {
             </div>
 
             <div className={styles.ideaList}>
-                {filteredIdeas.map((idea) => (
+                {paginatedIdeas.map((idea) => (
                     <AdminIdeaCard
                         key={idea.id}
                         idea={idea}
@@ -123,6 +128,79 @@ const AdminIdeaList = () => {
                     />
                 ))}
             </div>
+
+            {totalPages > 1 && (
+            <div className={styles.pagination}>
+                <button
+                    onClick={() => {
+                        setCurrentPage(prev => Math.max(prev - 1, 1));
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    disabled={currentPage === 1}
+                    className={`${styles.pageButton} ${currentPage === 1 ? styles.disabled : ''}`}
+                >
+                    ‹
+                </button>
+
+                {currentPage > 2 && (
+                    <button
+                        onClick={() => {
+                            setCurrentPage(1);
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}
+                        className={`${styles.pageButton} ${currentPage === 1 ? styles.activePage : ''}`}
+                    >
+                        1
+                    </button>
+                )}
+
+                {currentPage > 3 && <span className={styles.pageDots}>...</span>}
+
+                {Array.from({ length: totalPages }, (_, i) => i + 1)
+                    .filter(page =>
+                        page === currentPage ||
+                        page === currentPage - 1 ||
+                        page === currentPage + 1
+                    )
+                    .map(page => (
+                        <button
+                            key={page}
+                            onClick={() => {
+                                setCurrentPage(page);
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }}
+                            className={`${styles.pageButton} ${currentPage === page ? styles.activePage : ''}`}
+                        >
+                            {page}
+                        </button>
+                    ))}
+
+                {currentPage < totalPages - 2 && <span className={styles.pageDots}>...</span>}
+
+                {currentPage < totalPages - 1 && (
+                    <button
+                        onClick={() => {
+                            setCurrentPage(totalPages);
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}
+                        className={`${styles.pageButton} ${currentPage === totalPages ? styles.activePage : ''}`}
+                    >
+                        {totalPages}
+                    </button>
+                )}
+
+                <button
+                    onClick={() => {
+                        setCurrentPage(prev => Math.min(prev + 1, totalPages));
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    disabled={currentPage === totalPages}
+                    className={`${styles.pageButton} ${currentPage === totalPages ? styles.disabled : ''}`}
+                >
+                    ›
+                </button>
+            </div>
+        )}
         </div>
     );
 };
