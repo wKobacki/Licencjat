@@ -8,7 +8,7 @@ import {
 } from '../../api/IdeasApi/ideasExchangeApi';
 import MyIdeaForm from '../../components/MyIdeaForm/myIdeaForm';
 import { useTranslation } from 'react-i18next';
-import CommentSection from '../../components/CommentSection/CommentSection';
+import Comments from '../../components/CommentSection/Comments';
 import Lightbox from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/styles.css';
 
@@ -30,6 +30,9 @@ const IdeasExchange = () => {
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [lightboxImages, setLightboxImages] = useState([]);
     const [lightboxIndex, setLightboxIndex] = useState(0);
+
+    const [searchQuery, setSearchQuery] = useState('');
+    const [sortOption, setSortOption] = useState('date_desc');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -68,12 +71,30 @@ const IdeasExchange = () => {
     }, [userBranch, userEmail]);
 
     useEffect(() => {
+        let filteredIdeas = ideas.filter(idea =>
+            idea.title.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+
+        filteredIdeas.sort((a, b) => {
+            switch (sortOption) {
+                case 'votes_asc':
+                    return a.votes - b.votes;
+                case 'votes_desc':
+                    return b.votes - a.votes;
+                case 'date_asc':
+                    return new Date(a.createdAt) - new Date(b.createdAt);
+                case 'date_desc':
+                default:
+                    return new Date(b.createdAt) - new Date(a.createdAt);
+            }
+        });
+
         const start = (currentPage - 1) * itemsPerPage;
         const end = start + itemsPerPage;
-        setPaginatedIdeas(ideas.slice(start, end));
-        setTotalPages(Math.ceil(ideas.length / itemsPerPage));
+        setPaginatedIdeas(filteredIdeas.slice(start, end));
+        setTotalPages(Math.ceil(filteredIdeas.length / itemsPerPage));
         window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, [ideas, currentPage]);
+    }, [ideas, currentPage, searchQuery, sortOption]);
 
     const handleVote = async (ideaId) => {
         try {
@@ -162,6 +183,26 @@ const IdeasExchange = () => {
                 <p>{t('Loading...')}</p>
             ) : (
                 <>
+                    <div className={styles.filters}>
+                        <input
+                            type="text"
+                            placeholder={t('Search by title')}
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className={styles.searchInput}
+                        />
+                        <select
+                            value={sortOption}
+                            onChange={(e) => setSortOption(e.target.value)}
+                            className={styles.sortSelect}
+                        >
+                            <option value="date_desc">{t('Newest first')}</option>
+                            <option value="date_asc">{t('Oldest first')}</option>
+                            <option value="votes_desc">{t('Most votes')}</option>
+                            <option value="votes_asc">{t('Fewest votes')}</option>
+                        </select>
+                    </div>
+
                     <div className={styles.problemList}>
                         {paginatedIdeas.map(idea => (
                             <div key={idea.id} className={styles.problemCard}>
@@ -186,19 +227,21 @@ const IdeasExchange = () => {
                                     </div>
                                 )}
 
-                                <div className={styles.voteButtonContainer}>
-                                    <button
-                                        className={`${styles.voteButton} ${votedIdeas.includes(idea.id) ? styles.voted : ''}`}
-                                        onClick={() => handleVote(idea.id)}
-                                    >
-                                        {votedIdeas.includes(idea.id) ? t('Unvote') : t('Vote')}
-                                    </button>
-                                    <span className={styles.voteCount}>
-                                        {t('Votes')}: {idea.votes}
-                                    </span>
-                                </div>
+                                {idea.status === 'in_voting' && (
+                                    <div className={styles.voteButtonContainer}>
+                                        <button
+                                            className={`${styles.voteButton} ${votedIdeas.includes(idea.id) ? styles.voted : ''}`}
+                                            onClick={() => handleVote(idea.id)}
+                                        >
+                                            {votedIdeas.includes(idea.id) ? t('Unvote') : t('Vote')}
+                                        </button>
+                                        <span className={styles.voteCount}>
+                                            {t('Votes')}: {idea.votes}
+                                        </span>
+                                    </div>
+                                )}
 
-                                <CommentSection
+                                <Comments
                                     itemId={idea.id}
                                     itemType="idea"
                                     userEmail={userEmail}

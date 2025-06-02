@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import styles from './MyIdeas.module.css';
-import { getProblemsByBranch, voteForProblem } from '../../api/IdeasApi/myIdeasApi';
+import {
+    getProblemsByBranch,
+    voteForProblem
+} from '../../api/IdeasApi/myIdeasApi';
 import { fetchUserBlockStatus } from '../../api/IdeasApi/ideasExchangeApi';
 import MyIdeaForm from '../../components/MyIdeaForm/myIdeaForm';
 import { useTranslation } from 'react-i18next';
-import CommentSection from '../../components/CommentSection/CommentSection';
+import Comments from '../../components/CommentSection/Comments';
 import Lightbox from 'yet-another-react-lightbox';
 import "yet-another-react-lightbox/styles.css";
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
@@ -25,9 +28,11 @@ const MyIdeas = () => {
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [lightboxSlides, setLightboxSlides] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
-
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
+
+    const [searchQuery, setSearchQuery] = useState('');
+    const [sortOption, setSortOption] = useState('date_desc');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -59,12 +64,30 @@ const MyIdeas = () => {
     }, [userBranch, userEmail, t]);
 
     useEffect(() => {
+        let filtered = problems.filter(p =>
+            p.title.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+
+        filtered.sort((a, b) => {
+            switch (sortOption) {
+                case 'votes_asc':
+                    return a.votes - b.votes;
+                case 'votes_desc':
+                    return b.votes - a.votes;
+                case 'date_asc':
+                    return new Date(a.createdAt) - new Date(b.createdAt);
+                case 'date_desc':
+                default:
+                    return new Date(b.createdAt) - new Date(a.createdAt);
+            }
+        });
+
         const start = (currentPage - 1) * itemsPerPage;
         const end = start + itemsPerPage;
-        setPaginatedProblems(problems.slice(start, end));
-        setTotalPages(Math.ceil(problems.length / itemsPerPage));
+        setPaginatedProblems(filtered.slice(start, end));
+        setTotalPages(Math.ceil(filtered.length / itemsPerPage));
         window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, [problems, currentPage]);
+    }, [problems, currentPage, searchQuery, sortOption]);
 
     const handleVote = async (problemId) => {
         try {
@@ -162,7 +185,29 @@ const MyIdeas = () => {
             {loading ? (
                 <p>{t('Loading...')}</p>
             ) : (
-                <div>
+                <>
+                    <div className={styles.filters}>
+                        <div className={styles.searchAndSort}>
+                            <input
+                                type="text"
+                                placeholder={t('Search by title')}
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className={styles.searchInput}
+                            />
+                            <select
+                                value={sortOption}
+                                onChange={(e) => setSortOption(e.target.value)}
+                                className={styles.sortSelect}
+                            >
+                                <option value="date_desc">{t('Newest first')}</option>
+                                <option value="date_asc">{t('Oldest first')}</option>
+                                <option value="votes_desc">{t('Most votes')}</option>
+                                <option value="votes_asc">{t('Fewest votes')}</option>
+                            </select>
+                        </div>
+                    </div>
+
                     <div className={styles.problemList}>
                         {paginatedProblems.map(problem => (
                             <div key={problem.id} className={styles.problemCard}>
@@ -187,19 +232,21 @@ const MyIdeas = () => {
                                     </div>
                                 )}
 
-                                <div className={styles.voteButtonContainer}>
-                                    <button
-                                        className={`${styles.voteButton} ${votedProblems.includes(problem.id) ? styles.voted : ''}`}
-                                        onClick={() => handleVote(problem.id)}
-                                    >
-                                        {votedProblems.includes(problem.id) ? t('Unvote') : t('Vote')}
-                                    </button>
-                                    <span className={styles.voteCount}>
-                                        {t('Votes')}: {problem.votes}
-                                    </span>
-                                </div>
+                                {problem.status === 'in_voting' && (
+                                    <div className={styles.voteButtonContainer}>
+                                        <button
+                                            className={`${styles.voteButton} ${votedProblems.includes(problem.id) ? styles.voted : ''}`}
+                                            onClick={() => handleVote(problem.id)}
+                                        >
+                                            {votedProblems.includes(problem.id) ? t('Unvote') : t('Vote')}
+                                        </button>
+                                        <span className={styles.voteCount}>
+                                            {t('Votes')}: {problem.votes}
+                                        </span>
+                                    </div>
+                                )}
 
-                                <CommentSection
+                                <Comments
                                     itemId={problem.id}
                                     itemType="problem"
                                     userEmail={userEmail}
@@ -266,7 +313,7 @@ const MyIdeas = () => {
                             </button>
                         </div>
                     )}
-                </div>
+                </>
             )}
 
             {lightboxOpen && (

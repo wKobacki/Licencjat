@@ -6,10 +6,13 @@ import polandFlag from '../../assets/images/Poland.png';
 import ukFlag from '../../assets/images/UK.png';
 import { LanguageContext } from '../../i18n/contexts/LanguageContext';
 
-const MenuBar = ({ userRole, isLoggedIn }) => {
+const MenuBar = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { flag, changeLanguage } = useContext(LanguageContext);
+
+    const userRole = localStorage.getItem('userRole');
+    const isLoggedIn = !!userRole;
 
     const handleLogout = () => {
         localStorage.clear();
@@ -33,7 +36,9 @@ const MenuBar = ({ userRole, isLoggedIn }) => {
             {isLoggedIn && (
                 <nav className={styles.nav}>
                     <div className={styles.navLeft}>
-                        <button onClick={() => navigate('/HomePage')}>{t('Departments')}</button>
+                        <button onClick={() => navigate('/HomePage')}>
+                            {t('Departments')}
+                        </button>
 
                         {(userRole === 'manager' || userRole === 'admin') && (
                             <button onClick={() => navigate('/admin/ideas-management')}>
@@ -52,7 +57,9 @@ const MenuBar = ({ userRole, isLoggedIn }) => {
                         <button onClick={() => navigate('/ForgotPassword')}>
                             {t('Change password')}
                         </button>
-                        <button onClick={handleLogout}>{t('Logout')}</button>
+                        <button onClick={handleLogout}>
+                            {t('Logout')}
+                        </button>
                     </div>
                 </nav>
             )}

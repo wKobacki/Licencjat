@@ -134,5 +134,10 @@
     "Previous": "Previous",
     "Page": "Page",
     "Next": "Next",
-    "You want to log in? Click here": "You want to log in? Click here"
+    "You want to log in? Click here": "You want to log in? Click here",
+    "Most votes": "Most votes",
+    "Fewest votes": "Fewest votes",
+    "Newest first": "Newest first",
+    "Oldest first": "Oldest first",
+    "Search by title": "Search by title"
 }

@@ -134,5 +134,10 @@
     "Previous": "Poprzedni",
     "Page": "Strona",
     "Next": "Nastepny",
-    "You want to log in? Click here": "Chcesz się zalogować? Kliknij tutaj"
+    "You want to log in? Click here": "Chcesz się zalogować? Kliknij tutaj",
+    "Most votes": "Najwięcej głosów",
+    "Fewest votes": "Najmniej głosów",
+    "Newest first": "Najnowsze",
+    "Oldest first": "Najstarsze",
+    "Search by title": "Szukaj po tytule"
 }
