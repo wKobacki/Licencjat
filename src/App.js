@@ -25,16 +25,16 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        {/* PUBLIC ROUTES */}
-        <Route path="/" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/verify-email" element={<VerifyEmail />} />
-        <Route path="/reset-password" element={<ResetStepOne />} />
-        <Route path="/reset-password/step2" element={<ResetStepTwo />} />
-        <Route path="/reset-password/step3" element={<ResetStepThree />} />
-
-        {/* PRIVATE ROUTES */}
         <Route element={<MainLayout userRole={userRole} onLogout={handleLogout} />}>
+          {/* PUBLIC ROUTES */}
+          <Route path="/" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/reset-password" element={<ResetStepOne />} />
+          <Route path="/reset-password/step2" element={<ResetStepTwo />} />
+          <Route path="/reset-password/step3" element={<ResetStepThree />} />
+
+          {/* PRIVATE ROUTES */}
           <Route path="/homePage" element={<HomePage userEmail={userEmail} userRole={userRole} userBranch={userBranch} />} />
           <Route path="/myIdeas" element={<MyIdeas userEmail={userEmail} userRole={userRole} userBranch={userBranch} />} />
           <Route path="/IdeasExchange" element={<IdeasExchange userEmail={userEmail} userRole={userRole} userBranch={userBranch} />} />

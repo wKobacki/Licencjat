@@ -27,7 +27,10 @@ const RegisterPage = () => {
     });
 
     const passwordChecks = validatePassword(formData.password);
-    const passwordsMatch = formData.password === formData.confirmPassword;
+    const passwordsMatch =
+        formData.password === formData.confirmPassword &&
+        formData.password !== '' &&
+        formData.confirmPassword !== '';
 
     const renderCheck = (valid) =>
         valid ? <CheckCircle className={styles.validIcon} /> : <Cancel className={styles.invalidIcon} />;
@@ -63,9 +66,33 @@ const RegisterPage = () => {
         <div className={styles.registerContainer}>
             <form onSubmit={handleSubmit} className={styles.registerForm}>
                 <h2>{t('Register')}</h2>
-                <input type="email" name="email" placeholder={t('Email')} required value={formData.email} onChange={handleChange} />
-                <input type="text" name="name" placeholder={t('First name')} required value={formData.name} onChange={handleChange} />
-                <input type="text" name="surname" placeholder={t('Last name')} required value={formData.surname} onChange={handleChange} />
+
+                <input
+                    type="email"
+                    name="email"
+                    placeholder={t('Email')}
+                    required
+                    value={formData.email}
+                    onChange={handleChange}
+                />
+
+                <input
+                    type="text"
+                    name="name"
+                    placeholder={t('First name')}
+                    required
+                    value={formData.name}
+                    onChange={handleChange}
+                />
+
+                <input
+                    type="text"
+                    name="surname"
+                    placeholder={t('Last name')}
+                    required
+                    value={formData.surname}
+                    onChange={handleChange}
+                />
 
                 <select name="branch" value={formData.branch} onChange={handleChange}>
                     <option value="Warszawa">{t('Warsaw')}</option>
@@ -74,8 +101,23 @@ const RegisterPage = () => {
                     <option value="Gdańsk">{t('Gdańsk')}</option>
                 </select>
 
-                <input type="password" name="password" placeholder={t('Password')} required value={formData.password} onChange={handleChange} />
-                <input type="password" name="confirmPassword" placeholder={t('Confirm password')} required value={formData.confirmPassword} onChange={handleChange} />
+                <input
+                    type="password"
+                    name="password"
+                    placeholder={t('Password')}
+                    required
+                    value={formData.password}
+                    onChange={handleChange}
+                />
+
+                <input
+                    type="password"
+                    name="confirmPassword"
+                    placeholder={t('Confirm password')}
+                    required
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                />
 
                 <ul className={styles.passwordHints}>
                     <li>{renderCheck(passwordChecks.length)} {t('Min. 8 characters')}</li>
@@ -87,6 +129,7 @@ const RegisterPage = () => {
                 </ul>
 
                 {error && <p className={styles.errorText}>{error}</p>}
+
                 <button type="submit">{t('Register')}</button>
 
                 <p className={styles.linkText}>

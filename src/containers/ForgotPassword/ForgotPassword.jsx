@@ -11,6 +11,7 @@ const ForgotPassword = () => {
         newPassword: '',
         confirmPassword: ''
     });
+
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const navigate = useNavigate();
@@ -25,12 +26,14 @@ const ForgotPassword = () => {
     });
 
     const checks = validatePassword(formData.newPassword);
+    const passwordsMatch = formData.newPassword === formData.confirmPassword && formData.newPassword !== '';
 
     const renderIcon = (isValid) =>
         isValid ? <CheckCircle className={styles.valid} /> : <Cancel className={styles.invalid} />;
 
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
     };
 
     const handleSubmit = async (e) => {
@@ -38,7 +41,7 @@ const ForgotPassword = () => {
         setError('');
         setSuccess('');
 
-        if (formData.newPassword !== formData.confirmPassword) {
+        if (!passwordsMatch) {
             return setError(t('Passwords do not match.'));
         }
 
@@ -65,6 +68,7 @@ const ForgotPassword = () => {
         <div className={styles.container}>
             <form onSubmit={handleSubmit} className={styles.form}>
                 <h2 className={styles.heading}>{t('Change password')}</h2>
+
                 <input
                     type="password"
                     name="oldPassword"
@@ -74,6 +78,7 @@ const ForgotPassword = () => {
                     required
                     className={styles.input}
                 />
+
                 <input
                     type="password"
                     name="newPassword"
@@ -83,6 +88,7 @@ const ForgotPassword = () => {
                     required
                     className={styles.input}
                 />
+
                 <input
                     type="password"
                     name="confirmPassword"
@@ -99,10 +105,12 @@ const ForgotPassword = () => {
                     <li className={styles.ruleItem}>{renderIcon(checks.lower)} <span className={styles.ruleText}>{t('Lowercase letter')}</span></li>
                     <li className={styles.ruleItem}>{renderIcon(checks.digit)} <span className={styles.ruleText}>{t('Digit')}</span></li>
                     <li className={styles.ruleItem}>{renderIcon(checks.special)} <span className={styles.ruleText}>{t('Special character')}</span></li>
+                    <li className={styles.ruleItem}>{renderIcon(passwordsMatch)} <span className={styles.ruleText}>{t('Passwords match')}</span></li>
                 </ul>
 
                 {error && <p className={styles.error}>{error}</p>}
                 {success && <p className={styles.success}>{success}</p>}
+
                 <button type="submit" className={styles.submitButton}>{t('Change')}</button>
             </form>
         </div>

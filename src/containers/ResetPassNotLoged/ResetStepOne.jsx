@@ -38,6 +38,10 @@ const ResetStepOne = () => {
                 />
                 {error && <p className={styles.error}>{error}</p>}
                 <button type="submit">{t('Send code')}</button>
+                <p className={styles.linkText}>
+                    {t('You want to log in? Click here')}{' '}
+                    <span className={styles.loginLink} onClick={() => navigate('/')}>{t('Log in')}</span>
+                </p>
             </form>
         </div>
     );

@@ -6,7 +6,7 @@ import polandFlag from '../../assets/images/Poland.png';
 import ukFlag from '../../assets/images/UK.png';
 import { LanguageContext } from '../../i18n/contexts/LanguageContext';
 
-const MenuBar = ({ userRole }) => {
+const MenuBar = ({ userRole, isLoggedIn }) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { flag, changeLanguage } = useContext(LanguageContext);
@@ -30,27 +30,32 @@ const MenuBar = ({ userRole }) => {
                 </div>
             </header>
 
-            <nav className={styles.nav}>
-                <div className={styles.navLeft}>
-                    <button onClick={() => navigate('/HomePage')}>{t('Departments')}</button>
-                    {(userRole === 'manager' || userRole === 'admin') && (
-                        <button onClick={() => navigate('/admin/ideas-management')}>
-                            {t('Manage Ideas')}
+            {isLoggedIn && (
+                <nav className={styles.nav}>
+                    <div className={styles.navLeft}>
+                        <button onClick={() => navigate('/HomePage')}>{t('Departments')}</button>
+
+                        {(userRole === 'manager' || userRole === 'admin') && (
+                            <button onClick={() => navigate('/admin/ideas-management')}>
+                                {t('Manage Ideas')}
+                            </button>
+                        )}
+
+                        {userRole === 'admin' && (
+                            <button onClick={() => navigate('/admin/users')}>
+                                {t('Manage Users')}
+                            </button>
+                        )}
+                    </div>
+
+                    <div className={styles.navRight}>
+                        <button onClick={() => navigate('/ForgotPassword')}>
+                            {t('Change password')}
                         </button>
-                    )}
-                    {userRole === 'admin' && (
-                        <button onClick={() => navigate('/admin/users')}>
-                            {t('Manage Users')}
-                        </button>
-                    )}
-                </div>
-                <div className={styles.navRight}>
-                    <button onClick={() => navigate('/ForgotPassword')}>
-                        {t('Change password')}
-                    </button>
-                    <button onClick={handleLogout}>{t('Logout')}</button>
-                </div>
-            </nav>
+                        <button onClick={handleLogout}>{t('Logout')}</button>
+                    </div>
+                </nav>
+            )}
         </div>
     );
 };
