@@ -31,8 +31,8 @@
 
 .languageContainer {
     position: absolute;
-    right: 2%;
     top: 50%;
+    right: 2%;
     transform: translateY(-50%);
     display: inline-flex;
     flex-direction: column;
@@ -40,13 +40,30 @@
     z-index: 1001;
 }
 
-.languageContainer img {
+.languageWrapper {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.languageButton {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.languageWrapper img {
     height: 22px;
     border-radius: 4px;
     cursor: pointer;
 }
 
 .languageDropdown {
+    position: absolute;
+    top: 110%;
+    right: 0;
     margin-top: 6px;
     background: #2f2f2f;
     display: none;
@@ -57,7 +74,8 @@
     z-index: 1000;
 }
 
-.languageContainer:hover .languageDropdown {
+.languageWrapper:hover .languageDropdown,
+.languageWrapper:focus-within .languageDropdown {
     display: flex;
 }
 
@@ -139,9 +157,4 @@
         width: 90%;
     }
 
-    .languageContainer {
-        top: 1rem;
-        right: 1rem;
-        transform: none;
-    }
 }

@@ -93,7 +93,7 @@ const AdminIdeaCard = ({ idea, onUpdate }) => {
 
             <div className={styles.info}>
                 <p><strong>{t('Author')}:</strong> {idea.author_email || t('Unknown')}</p>
-                <p><strong>{t('Department')}:</strong> {idea.type === 'problem' ? idea.branch || t('Unknown') : t('General stock')}</p>
+                <p><strong>{t('Stock idea')}:</strong> {idea.type === 'problem' ? idea.branch || t('Unknown') : t('General stock')}</p>
             </div>
 
             {images.length > 0 && (

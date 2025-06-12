@@ -26,7 +26,7 @@ export const deleteComment = async (commentId) => {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                'x-user-email': localStorage.getItem('userEmail') // to jest KLUCZOWE
+                'x-user-email': localStorage.getItem('userEmail')
             }
         });
 

@@ -62,13 +62,11 @@ const Comments = ({ itemId, itemType, userEmail }) => {
         const parent = replyTo ? findCommentById(comments, replyTo) : null;
 
         if (parent) {
-            // blokujemy odpowiedzi na odpowiedzi
             if (parent.parent_id !== null) {
                 alert('Można odpowiadać tylko na komentarze najwyższego poziomu.');
                 return;
             }
 
-            // maksymalnie 2 odpowiedzi do komentarza głównego
             const directReplies = parent.replies || [];
             if (directReplies.length >= 2) {
                 alert('Ten komentarz ma już maksymalną liczbę odpowiedzi (2).');

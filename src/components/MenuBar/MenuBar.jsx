@@ -25,10 +25,14 @@ const MenuBar = () => {
                 <div className={styles.title}>IDEAS STOCK</div>
 
                 <div className={styles.languageContainer}>
-                    <img src={flag} alt="Current Language" />
-                    <div className={styles.languageDropdown}>
-                        <img src={polandFlag} alt="PL" onClick={() => changeLanguage('pl')} />
-                        <img src={ukFlag} alt="EN" onClick={() => changeLanguage('en')} />
+                    <div className={styles.languageWrapper}>
+                        <button className={styles.languageButton} tabIndex={0}>
+                            <img src={flag} alt="Current Language" />
+                        </button>
+                        <div className={styles.languageDropdown}>
+                            <img src={polandFlag} alt="PL" onClick={() => changeLanguage('pl')} />
+                            <img src={ukFlag} alt="EN" onClick={() => changeLanguage('en')} />
+                        </div>
                     </div>
                 </div>
             </header>

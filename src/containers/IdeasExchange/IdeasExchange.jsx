@@ -126,13 +126,22 @@ const IdeasExchange = () => {
         const form = e.target;
         const formData = new FormData(form);
         formData.append('branch', userBranch);
-        files.forEach(file => formData.append('images', file));
 
         const response = await submitIdea(formData, userEmail);
         console.log('Form submitted:', response);
+
+        if (response.success) {
+            const updatedIdeas = await fetchIdeas(userEmail);
+            setIdeas(updatedIdeas);
+
+            const voted = updatedIdeas
+                .filter(idea => idea.hasVoted)
+                .map(idea => idea.id);
+            setVotedIdeas(voted);
+        }
+
         form.reset();
         setShowForm(false);
-        window.location.reload();
     };
 
     const getStatusClass = (status) => {
