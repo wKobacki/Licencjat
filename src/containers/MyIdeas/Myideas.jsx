@@ -13,6 +13,8 @@ import "yet-another-react-lightbox/styles.css";
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 const MyIdeas = () => {
     const { t } = useTranslation();
     const userEmail = localStorage.getItem('userEmail');
@@ -134,7 +136,7 @@ const MyIdeas = () => {
         formData.append('branch', userBranch);
         files.forEach(file => formData.append('images', file));
 
-        const response = await fetch('http://localhost:5000/submitProblem', {
+        const response = await fetch(`${API_URL}/submitProblem`, {
             method: 'POST',
             headers: { 'x-user-email': userEmail },
             body: formData
@@ -148,7 +150,7 @@ const MyIdeas = () => {
     };
 
     const openLightbox = (images, index) => {
-        const slides = images.map(img => ({ src: `http://localhost:5000${img}` }));
+        const slides = images.map(img => ({ src: `${API_URL}${img}` }));
         setLightboxSlides(slides);
         setCurrentIndex(index);
         setLightboxOpen(true);
@@ -223,7 +225,7 @@ const MyIdeas = () => {
                                         {problem.images.map((img, idx) => (
                                             <img
                                                 key={idx}
-                                                src={`http://localhost:5000${img}`}
+                                                src={`${API_URL}${img}`}
                                                 alt={`problem-${idx}`}
                                                 className={styles.thumbnail}
                                                 onClick={() => openLightbox(problem.images, idx)}
