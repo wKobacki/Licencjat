@@ -43,10 +43,11 @@ const AdminCommentSection = ({ ideaId, ideaType }) => {
     };
 
     const handleDeleteComment = async (comment) => {
+        if (!comment || !comment.id) return;
+
+        await deleteComment(comment.id);
+
         const toDelete = getAllNestedCommentIds(comment);
-        for (const id of toDelete) {
-            await deleteComment(id);
-        }
 
         const removeFromTree = (list) => {
             return list
