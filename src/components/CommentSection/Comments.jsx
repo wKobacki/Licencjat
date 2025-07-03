@@ -66,12 +66,6 @@ const Comments = ({ itemId, itemType, userEmail }) => {
                 alert('Można odpowiadać tylko na komentarze najwyższego poziomu.');
                 return;
             }
-
-            const directReplies = parent.replies || [];
-            if (directReplies.length >= 2) {
-                alert('Ten komentarz ma już maksymalną liczbę odpowiedzi (2).');
-                return;
-            }
         }
 
         try {
